@@ -9,6 +9,6 @@ struct Node {
     Node(int id, double x, double y) : id(id), x(x), y(y) {}
 
     void print() const {
-        std::cout << "Node ID: " << id << " | Coordinates: (" << x << ", " << y << ")" << std::endl;
+        std::cout << "Node " << id << ": (" << x << ", " << y << ")" << std::endl;
     }
 };

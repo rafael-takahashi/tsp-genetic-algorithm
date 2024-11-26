@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "node.h"
 
@@ -15,6 +16,7 @@ int main() {
 
     std::string line;
     int dimension;
+    std::vector<Node> node_list;
     
     while (std::getline(file, line) && line != "NODE_COORD_SECTION") {
         if (line.find("DIMENSION:") != std::string::npos) {
@@ -28,9 +30,26 @@ int main() {
     std::cout << "Data Section\n";
 
     while (std::getline(file, line) && line != "EOF") {
-        std::cout << line << '\n';
+        std::istringstream stream(line);
+        std::string string_id, string_x, string_y;
+
+        stream >> string_id >> string_x >> string_y;
+        
+        std::stringstream idStream(string_id), xStream(string_x), yStream(string_y);
+        int id;
+        double x, y;
+        
+        idStream >> id;
+        xStream >> x;
+        yStream >> y;
+
+        Node node(id, x, y);
+        node_list.push_back(node);
     }
-    
+
+    for (Node node : node_list)
+        node.print();
+
     file.close();
     return 0;
 }
