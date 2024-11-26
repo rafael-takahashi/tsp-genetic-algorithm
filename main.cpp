@@ -6,50 +6,47 @@
 
 #include "node.h"
 
+std::vector<Node> tsp_to_vector(std::string file_path);
+
 int main() {
-    std::ifstream file("instances/a280.tsp");
+    std::string file_path = "instances/a280.tsp";
+    std::vector node_list = tsp_to_vector(file_path);
+
+    for (Node node : node_list)
+        node.print();
+
+    return 0; 
+}
+
+std::vector<Node> tsp_to_vector(std::string file_path) {
+    std::ifstream file(file_path);
 
     if (!file.is_open()) {
         std::cerr << "Failed to open file.\n";
-        return 1;
+        exit(1);
     }
 
     std::string line;
-    int dimension;
     std::vector<Node> node_list;
     
-    while (std::getline(file, line) && line != "NODE_COORD_SECTION") {
-        if (line.find("DIMENSION:") != std::string::npos) {
-            std::stringstream ss(line);
-            std::string keyword;
-            ss >> keyword >> dimension;
-        }
-    }
-
-    std::cout << "Dimension: " << dimension << '\n';
-    std::cout << "Data Section\n";
-
+    while (std::getline(file, line) && line != "NODE_COORD_SECTION") continue;
+    
+    int id;
+    double x, y;
+    
     while (std::getline(file, line) && line != "EOF") {
         std::istringstream stream(line);
         std::string string_id, string_x, string_y;
 
         stream >> string_id >> string_x >> string_y;
-        
-        std::stringstream idStream(string_id), xStream(string_x), yStream(string_y);
-        int id;
-        double x, y;
-        
-        idStream >> id;
-        xStream >> x;
-        yStream >> y;
+        id = stoi(string_id);
+        x = stod(string_x);
+        y = stod(string_y); 
 
-        Node node(id, x, y);
-        node_list.push_back(node);
+        node_list.emplace_back(id, x, y);
     }
 
-    for (Node node : node_list)
-        node.print();
-
     file.close();
-    return 0;
+
+    return node_list;
 }
