@@ -1,30 +1,10 @@
+#include "tsp.h"
 #include <cmath>
 #include <fstream>
-#include <iostream>
 #include <limits>
 #include <sstream>
-#include <string>
-#include <vector>
-
-#include "node.h"
 
 using namespace std;
-
-vector<Node> tsp_to_vector(const string& file_path);
-vector<Node> nearest_neighbor(const vector<Node>& node_list);
-double calculate_distance(double x1, double y1, double x2, double y2);
-
-int main() {
-    string file_path = "instances/a280.tsp";
-    vector<Node> node_list = tsp_to_vector(file_path);
-
-    vector<Node> node_sequence = nearest_neighbor(node_list);
-
-    for (Node node : node_sequence)
-        node.print();
-
-    return 0; 
-}
 
 vector<Node> tsp_to_vector(const string& file_path) {
     ifstream file(file_path);
@@ -59,8 +39,9 @@ vector<Node> tsp_to_vector(const string& file_path) {
     return node_list;
 }
 
-vector<Node> nearest_neighbor(const vector<Node>& node_list) {
+TspResult nearest_neighbor(const vector<Node>& node_list) {
     vector<Node> node_sequence;
+    double res_distance = 0;
     vector<bool> visited(node_list.size(), false);
 
     int current = 0;
@@ -85,11 +66,12 @@ vector<Node> nearest_neighbor(const vector<Node>& node_list) {
         }
 
         node_sequence.push_back(node_list[next]);
+        res_distance += min_distance;
         visited[next] = true;
         current = next;
     }
 
-    return node_sequence;
+    return {res_distance, node_sequence};
 }
 
 double calculate_distance(double x1, double y1, double x2, double y2) {
