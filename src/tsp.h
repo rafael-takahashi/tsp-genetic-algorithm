@@ -10,4 +10,5 @@ struct TspResult {
 
 std::vector<Node> tsp_to_vector(const std::string& file_path);
 TspResult nearest_neighbor(const std::vector<Node>& node_list);
-double calculate_distance(double x1, double y1, double x2, double y2);
+TspResult two_opt(const std::vector<Node>& path);
+double calculate_total_distance(const std::vector<Node>& node_list);
