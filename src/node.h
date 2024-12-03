@@ -12,3 +12,5 @@ struct Node {
         std::cout << "Node " << id << ": (" << x << ", " << y << ")" << std::endl;
     }
 };
+
+double calculate_distance(Node A, Node B);

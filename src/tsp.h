@@ -3,12 +3,18 @@
 #include <vector>
 #include "node.h"
 
-struct TspResult {
-    double traveled_distance;
+struct Path {
+    double distance;
     std::vector<Node> node_sequence;
+    size_t size;
+
+    Path(double distance, const std::vector<Node>& sequence)
+        : distance(distance), 
+          node_sequence(sequence), 
+          size(sequence.size()) {}
 };
 
 std::vector<Node> tsp_to_vector(const std::string& file_path);
-TspResult nearest_neighbor(const std::vector<Node>& node_list);
-TspResult two_opt(const std::vector<Node>& path);
+Path nearest_neighbor(const std::vector<Node>& node_list);
+Path two_opt(const Path& path);
 double calculate_total_distance(const std::vector<Node>& node_list);

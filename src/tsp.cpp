@@ -1,14 +1,12 @@
 #include "tsp.h"
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <limits>
 #include <sstream>
+#include "node.h"
 
 using namespace std;
-
-double calculate_distance(double x1, double y1, double x2, double y2) {
-    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-}
 
 vector<Node> tsp_to_vector(const string& file_path) {
     ifstream file(file_path);
@@ -43,7 +41,7 @@ vector<Node> tsp_to_vector(const string& file_path) {
     return node_list;
 }
 
-TspResult nearest_neighbor(const vector<Node>& node_list) {
+Path nearest_neighbor(const vector<Node>& node_list) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<bool> visited(node_list.size(), false);
@@ -60,8 +58,7 @@ TspResult nearest_neighbor(const vector<Node>& node_list) {
 
         for (size_t i = 0; i < node_list.size(); i++) {
             if (visited[i] == false) {
-                double distance = calculate_distance(node_list[current].x, node_list[current].y,
-                                                     node_list[i].x, node_list[i].y);
+                double distance = calculate_distance(node_list[current], node_list[i]);
                 if (distance < min_distance) {
                     min_distance = distance;
                     next = i;
@@ -75,55 +72,51 @@ TspResult nearest_neighbor(const vector<Node>& node_list) {
         current = next;
     }
 
-    return {res_distance, node_sequence};
+    return Path(res_distance, node_sequence);
 }
 
-vector<Node> two_opt_swap(vector<Node> path, size_t first, size_t second) {
-    vector<Node> new_path;
+Path two_opt_swap(Path path, unsigned int first, unsigned int second) {
+    double new_distance = path.distance;
 
-    for (size_t i = 0; i <= first; i++)
-        new_path.push_back(path[i]);
-    
-    for (size_t j = second; j >= first + 1; j--)
-        new_path.push_back(path[j]);
-        
-    for (size_t k = second + 1; k < path.size(); k++)
-        new_path.push_back(path[k]);
+    new_distance += - calculate_distance(path.node_sequence[first], path.node_sequence[first + 1])
+                    - calculate_distance(path.node_sequence[second], path.node_sequence[(second + 1) % path.size])
+                    + calculate_distance(path.node_sequence[first], path.node_sequence[second])
+                    + calculate_distance(path.node_sequence[first + 1], path.node_sequence[(second + 1) % path.size]);
 
-    return new_path;
+    vector<Node> new_sequence = path.node_sequence;
+
+    reverse(new_sequence.begin() + first + 1, new_sequence.begin() + second + 1);
+
+    return Path(new_distance, new_sequence);
 }
 
-TspResult two_opt(const vector<Node>& path) {
+Path two_opt(const Path& path) {
     vector<Node> opt_sequence;
-    vector<Node> current_path = path;
-    double best_distance = calculate_total_distance(current_path);
+    Path current_path = path;
     bool has_improved = true;
 
-    while(has_improved){
+    while (has_improved) {
         has_improved = false;
-        for (size_t i = 0; i < path.size() - 2; i++) {
-            for (size_t j = i + 1; j < path.size() - 1; j++) {
-                vector<Node> new_path = two_opt_swap(current_path, i, j);
-                double new_distance = calculate_total_distance(new_path);
+        for (size_t i = 0; i < path.size - 2; i++) {
+            for (size_t j = i + 1; j < path.size - 1; j++) {
+                Path new_path = two_opt_swap(current_path, i, j);
                 
-                if (new_distance < best_distance) {
+                if (new_path.distance < current_path.distance) {
                     current_path = new_path;
-                    best_distance = new_distance;
                     has_improved = true;
                 }
             }
         }
     }
-    
-    return {best_distance, current_path};
+
+    return current_path;
 }
 
 double calculate_total_distance(const vector<Node>& node_list) {
     double res_distance = 0;
 
     for (size_t i = 0; i < node_list.size() - 1; i++) 
-        res_distance += calculate_distance(node_list[i].x, node_list[i].y, 
-                                           node_list[i + 1].x, node_list[i + 1].y);
+        res_distance += calculate_distance(node_list[i], node_list[i + 1]);
 
     return res_distance;
 }
