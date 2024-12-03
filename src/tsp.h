@@ -17,4 +17,3 @@ struct Path {
 std::vector<Node> tsp_to_vector(const std::string& file_path);
 Path nearest_neighbor(const std::vector<Node>& node_list);
 Path two_opt(const Path& path);
-double calculate_total_distance(const std::vector<Node>& node_list);

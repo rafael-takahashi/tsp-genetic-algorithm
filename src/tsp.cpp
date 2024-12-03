@@ -100,7 +100,7 @@ Path two_opt(const Path& path) {
         for (size_t i = 0; i < path.size - 2; i++) {
             for (size_t j = i + 1; j < path.size - 1; j++) {
                 Path new_path = two_opt_swap(current_path, i, j);
-                
+
                 if (new_path.distance < current_path.distance) {
                     current_path = new_path;
                     has_improved = true;
@@ -110,13 +110,4 @@ Path two_opt(const Path& path) {
     }
 
     return current_path;
-}
-
-double calculate_total_distance(const vector<Node>& node_list) {
-    double res_distance = 0;
-
-    for (size_t i = 0; i < node_list.size() - 1; i++) 
-        res_distance += calculate_distance(node_list[i], node_list[i + 1]);
-
-    return res_distance;
 }
