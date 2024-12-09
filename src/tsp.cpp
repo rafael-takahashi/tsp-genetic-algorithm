@@ -46,7 +46,7 @@ Path nearest_neighbor(const vector<Node>& node_list) {
     double res_distance = 0;
     vector<bool> visited(node_list.size(), false);
 
-    int current = 0;
+    int current = 0; // Change this to a random number to get a different starting point
 
     node_sequence.push_back(node_list[current]);
 
