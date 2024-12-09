@@ -1,3 +1,13 @@
 *.out
 .vscode
 test.cpp
+
+instances/*
+
+!instances/pcb1173.tsp
+!instances/pr1002.tsp
+!instances/brd14051.tsp
+!instances/fnl4461.tsp
+!instances/d15112.tsp
+!instances/pla33810.tsp
+!instances/pla85900.tsp

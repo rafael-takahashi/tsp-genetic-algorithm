@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<Node> tsp_to_vector(const string& file_path) {
+vector<Node> tsp_to_vector(string& file_path) {
     ifstream file(file_path);
 
     if (!file.is_open()) {

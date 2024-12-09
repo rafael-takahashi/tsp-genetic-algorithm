@@ -14,6 +14,6 @@ struct Path {
           size(sequence.size()) {}
 };
 
-std::vector<Node> tsp_to_vector(const std::string& file_path);
+std::vector<Node> tsp_to_vector(std::string& file_path);
 Path nearest_neighbor(const std::vector<Node>& node_list);
 Path two_opt(const Path& path);
