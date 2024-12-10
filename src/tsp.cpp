@@ -75,39 +75,37 @@ Path nearest_neighbor(const vector<Node>& node_list) {
     return Path(res_distance, node_sequence);
 }
 
-Path two_opt_swap(Path path, unsigned int first, unsigned int second) {
-    double new_distance = path.distance;
-
-    new_distance += - calculate_distance(path.node_sequence[first], path.node_sequence[first + 1])
-                    - calculate_distance(path.node_sequence[second], path.node_sequence[(second + 1) % path.size])
-                    + calculate_distance(path.node_sequence[first], path.node_sequence[second])
-                    + calculate_distance(path.node_sequence[first + 1], path.node_sequence[(second + 1) % path.size]);
-
-    vector<Node> new_sequence = path.node_sequence;
-
-    reverse(new_sequence.begin() + first + 1, new_sequence.begin() + second + 1);
-
-    return Path(new_distance, new_sequence);
+void two_opt_swap(vector<Node>& sequence, unsigned int first, unsigned int second) {
+    first++;
+    while (first < second) {
+        swap(sequence[first], sequence[second]);
+        first++;
+        second--;
+    }
 }
 
 Path two_opt(const Path& path) {
-    vector<Node> opt_sequence;
-    Path current_path = path;
-    bool has_improved = true;
+    vector<Node> current_sequence = path.node_sequence;
+    double current_distance = path.distance;
+    bool has_improved;
 
-    while (has_improved) {
+    do {
         has_improved = false;
-        for (size_t i = 0; i < path.size - 2; i++) {
-            for (size_t j = i + 1; j < path.size - 1; j++) {
-                Path new_path = two_opt_swap(current_path, i, j);
+        for (size_t i = 0; i < path.size - 1; i++) {
+            for (size_t j = i + 2; j < path.size; j++) {
+                double delta = - calculate_distance(current_sequence[i], current_sequence[i + 1])
+                               - calculate_distance(current_sequence[j], current_sequence[(j + 1) % path.size])
+                               + calculate_distance(current_sequence[i], current_sequence[j])
+                               + calculate_distance(current_sequence[i + 1], current_sequence[(j + 1) % path.size]);
 
-                if (new_path.distance < current_path.distance) {
-                    current_path = new_path;
+                if (delta < 0 && delta < -1e-10) {
+                    two_opt_swap(current_sequence, i, j);
+                    current_distance += delta;
                     has_improved = true;
                 }
             }
         }
-    }
+    } while (has_improved);
 
-    return current_path;
+    return Path(current_distance, current_sequence);
 }

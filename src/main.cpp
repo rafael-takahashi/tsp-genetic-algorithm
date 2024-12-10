@@ -16,6 +16,7 @@ int main() {
     */
 
     vector<string> instances_file_paths = {
+        "instances/att532.tsp",
         "instances/pcb1173.tsp",
         "instances/pr1002.tsp",
         "instances/brd14051.tsp",
@@ -25,8 +26,8 @@ int main() {
         "instances/pla85900.tsp"
     };
 
-    for (size_t i = 0; i < instances_file_paths.size(); i++) {
-        string file_path = instances_file_paths[i];
+    //for (size_t i = 0; i < instances_file_paths.size(); i++) {
+        string file_path = "instances/brd14051.tsp";
         cout << "--------------------------------\nFile path: " << file_path << "\n";
 
         vector<Node> node_list = tsp_to_vector(file_path);
@@ -36,7 +37,7 @@ int main() {
 
         Path two_opt_path = two_opt(nearest_neighbor_path);
         cout << "\n2-opt traveled distance: " << two_opt_path.distance << "\n--------------------------------\n";
-    }
+    //}
     
     return 0; 
 }
