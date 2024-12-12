@@ -1,0 +1,57 @@
+--------------------------------
+File path: instances/pcb1173.tsp
+
+Nearest neighbor traveled distance: 69086.789951756043592
+Nearest neighbor execution time: 54ms
+
+2-opt traveled distance: 60623.862434242015297
+Nearest neighbor execution time: 182ms
+--------------------------------
+File path: instances/pr1002.tsp
+
+Nearest neighbor traveled distance: 310683.085587995476089
+Nearest neighbor execution time: 36ms
+
+2-opt traveled distance: 272888.918991861108225
+Nearest neighbor execution time: 113ms
+--------------------------------
+File path: instances/brd14051.tsp
+
+Nearest neighbor traveled distance: 574366.348537088022567
+Nearest neighbor execution time: 7743ms
+
+2-opt traveled distance: 503733.665354696800932
+Nearest neighbor execution time: 52134ms
+--------------------------------
+File path: instances/fnl4461.tsp
+
+Nearest neighbor traveled distance: 223621.754712273977930
+Nearest neighbor execution time: 871ms
+
+2-opt traveled distance: 192606.707252017658902
+Nearest neighbor execution time: 3498ms
+--------------------------------
+File path: instances/d15112.tsp
+
+Nearest neighbor traveled distance: 1938673.298909092089161
+Nearest neighbor execution time: 9388ms
+
+2-opt traveled distance: 1687932.761743742274120
+Nearest neighbor execution time: 36365ms
+--------------------------------
+File path: instances/pla33810.tsp
+
+Nearest neighbor traveled distance: 77236153.474480345845222
+Nearest neighbor execution time: 43880ms
+
+2-opt traveled distance: 70694070.841225787997246
+Nearest neighbor execution time: 223532ms
+--------------------------------
+File path: instances/pla85900.tsp
+
+Nearest neighbor traveled distance: 163054411.639323621988297
+Nearest neighbor execution time: 259399ms
+
+2-opt traveled distance: 150467538.926549255847931
+Nearest neighbor execution time: 1460112ms
+--------------------------------

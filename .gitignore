@@ -4,7 +4,6 @@ test.cpp
 
 instances/*
 
-!instances/att532.tsp
 !instances/pcb1173.tsp
 !instances/pr1002.tsp
 !instances/brd14051.tsp

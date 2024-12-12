@@ -1,11 +1,11 @@
 #include <chrono>
+#include <iomanip>
 #include "tsp.h"
 
 using namespace std;
 
 int main() {
     vector<string> instances_file_paths = {
-        "instances/att532.tsp",
         "instances/pcb1173.tsp",
         "instances/pr1002.tsp",
         "instances/brd14051.tsp",
@@ -21,22 +21,26 @@ int main() {
 
         vector<Node> node_list = tsp_to_vector(file_path);
 
-        auto neighbor_begin = chrono::high_resolution_clock::now();
+        auto start = chrono::high_resolution_clock::now();
         Path nearest_neighbor_path = nearest_neighbor(node_list);
-        auto neighbor_end = chrono::high_resolution_clock::now();
+        auto elapsed = chrono::high_resolution_clock::now();
 
-        cout << "\nNearest neighbor traveled distance: " << nearest_neighbor_path.distance << "\n";
+        cout << "\nNearest neighbor traveled distance: " 
+             << fixed << setprecision(15) 
+             << nearest_neighbor_path.distance << "\n";
         cout << "Nearest neighbor execution time: " 
-             << chrono::duration_cast<chrono::milliseconds>(neighbor_end - neighbor_begin).count() 
+             << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
              << "ms\n";
 
-        auto two_opt_begin = chrono::high_resolution_clock::now();
+        start = chrono::high_resolution_clock::now();
         Path two_opt_path = two_opt(nearest_neighbor_path);
-        auto two_opt_end = chrono::high_resolution_clock::now();
+        elapsed = chrono::high_resolution_clock::now();
 
-        cout << "\n2-opt traveled distance: " << two_opt_path.distance << '\n';
+        cout << "\n2-opt traveled distance: " 
+             << fixed << setprecision(15) 
+             << two_opt_path.distance << '\n';
         cout << "Nearest neighbor execution time: " 
-             << chrono::duration_cast<chrono::milliseconds>(neighbor_end - neighbor_begin).count() 
+             << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
              << "ms\n";
     }
     cout << "--------------------------------\n";
