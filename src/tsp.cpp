@@ -109,3 +109,117 @@ Path two_opt(const Path& path) {
 
     return Path(current_distance, current_sequence);
 }
+
+void calcularDistancias(const vector<Node>& nodes, vector<vector<double>>& dist) {
+    int n = nodes.size();
+    dist.resize(n, vector<double>(n, 0.0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            double d = calculate_distance(nodes[i], nodes[j]);
+            dist[i][j] = dist[j][i] = d;
+        }
+    }
+}
+
+void insercaoMaisDistante(vector<Node> nodes, vector<Node>& caminho, double& distancia_total) {
+    int n = nodes.size();
+    vector<bool> visitados(n, false);
+
+    caminho.push_back(nodes[0]);
+    caminho.push_back(nodes[1]);
+    caminho.push_back(nodes[2]);
+    visitados[0] = visitados[1] = visitados[2] = true;
+    
+    distancia_total += calculate_distance(nodes[0], nodes[1]) + 
+                        calculate_distance(nodes[1], nodes[2]) + 
+                        calculate_distance(nodes[2], nodes[0]);
+
+    while (caminho.size() < nodes.size()) {
+
+        int proximo_no = -1;
+        double maior_distancia_ao_caminho = -1;
+
+        for (int i = 0; i < n; ++i) {
+            if (visitados[i]) continue;
+            double maior_distancia = -1;
+
+            for (const auto& node_caminho : caminho) {
+                maior_distancia = max(maior_distancia, calculate_distance(nodes[i], node_caminho));
+            }
+
+            if (maior_distancia > maior_distancia_ao_caminho) {
+                maior_distancia_ao_caminho = maior_distancia;
+                proximo_no = i;
+            }
+        }
+
+        double menor_custo_insercao = numeric_limits<double>::max();
+        int melhor_posicao = -1;
+
+        for (size_t j = 0; j < caminho.size(); ++j) {
+            int atual = j;
+            int seguinte = (j + 1) % caminho.size();
+            double custo_insercao = calculate_distance(caminho[atual], nodes[proximo_no]) +
+                                    calculate_distance(nodes[proximo_no], caminho[seguinte]) -
+                                    calculate_distance(caminho[atual], caminho[seguinte]);
+
+            if (custo_insercao < menor_custo_insercao) {
+                menor_custo_insercao = custo_insercao;
+                melhor_posicao = seguinte;
+            }
+        }
+
+        caminho.insert(caminho.begin() + melhor_posicao, nodes[proximo_no]);
+        visitados[proximo_no] = true;
+        distancia_total += menor_custo_insercao;
+    }
+}
+
+double calcula_custo(const vector<Node>& caminho) {
+    double custo_novo = 0.0;
+
+    for (size_t i = 0; i < caminho.size(); ++i) {
+        int prox_node = (i + 1) % caminho.size();
+        custo_novo += calculate_distance(caminho[i], caminho[prox_node]);
+    }
+
+    return custo_novo;
+}
+
+vector<Node> troca_pares(vector<Node> caminho, double& custo) {
+    int iteracoes_sem_melhoria = 0;
+    int iteracoes_maximas = 0;
+
+    while (iteracoes_sem_melhoria < 5 && iteracoes_maximas < 25) {
+        bool houve_melhoria = false;
+
+        size_t i = 0;
+        while (i < caminho.size() && !houve_melhoria) {
+            size_t j = i + 1;
+            while (j < caminho.size() && !houve_melhoria) {
+                swap(caminho[i], caminho[j]);
+
+                double custo_apos_troca = calcula_custo(caminho);
+
+                if (custo_apos_troca < custo) {
+                    custo = custo_apos_troca;
+                    houve_melhoria = true;
+                    iteracoes_sem_melhoria = 0;
+
+                    cout << "Novo custo: " << custo << endl;
+                } else {
+                    swap(caminho[i], caminho[j]);
+                }
+                ++j;
+            }
+            ++i;
+        }
+
+        if (!houve_melhoria) {
+            iteracoes_sem_melhoria++;
+        }
+        iteracoes_maximas++;
+    }
+
+    return caminho;
+}

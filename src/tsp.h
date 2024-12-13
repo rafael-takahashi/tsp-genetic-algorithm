@@ -17,3 +17,5 @@ struct Path {
 std::vector<Node> tsp_to_vector(std::string& file_path);
 Path nearest_neighbor(const std::vector<Node>& node_list);
 Path two_opt(const Path& path);
+void insercaoMaisDistante(std::vector<Node> nodes, std::vector<Node>& caminho, double& distancia_total);
+std::vector<Node> troca_pares(std::vector<Node> caminho, double& custo);

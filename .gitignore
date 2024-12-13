@@ -1,9 +1,11 @@
 *.out
 .vscode
 test.cpp
+TODO.txt
 
 instances/*
 
+!instances/u574.tsp
 !instances/pcb1173.tsp
 !instances/pr1002.tsp
 !instances/brd14051.tsp
