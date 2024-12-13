@@ -13,3 +13,6 @@ instances/*
 !instances/d15112.tsp
 !instances/pla33810.tsp
 !instances/pla85900.tsp
+
+plot/data.txt
+plot/plot.png

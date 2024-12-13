@@ -1,5 +1,6 @@
 #include "tsp.h"
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <fstream>
 #include <limits>
@@ -89,6 +90,13 @@ Path two_opt(const Path& path) {
     double current_distance = path.distance;
     bool has_improved;
 
+    // Open file and start timer, can be deleted
+    ofstream outfile;
+    outfile.open("plot/data.txt");
+    if (!outfile.is_open())
+        cerr << "Unable to open file for writing.\n"; 
+    auto start_time = chrono::high_resolution_clock::now();
+
     do {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
@@ -105,6 +113,10 @@ Path two_opt(const Path& path) {
                 }
             }
         }
+        // Write data to file, can be deleted
+        auto current_time = chrono::high_resolution_clock::now();
+        chrono::duration<double> elapsed = current_time - start_time;
+        outfile << elapsed.count() << " " << current_distance << endl;
     } while (has_improved);
 
     return Path(current_distance, current_sequence);

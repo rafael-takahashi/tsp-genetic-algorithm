@@ -16,7 +16,7 @@ int main() {
     };
 
     //for (size_t i = 0; i < instances_file_paths.size(); i++) {
-        string file_path = "instances/a280.tsp";
+        string file_path = "instances/pr1002.tsp";
         cout << "--------------------------------\nFile path: " << file_path << "\n";
 
         vector<Node> node_list = tsp_to_vector(file_path);
