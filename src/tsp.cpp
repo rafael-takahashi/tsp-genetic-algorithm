@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cmath>
 #include <fstream>
+#include <queue>
 #include <limits>
 #include <sstream>
 #include "node.h"
@@ -47,7 +48,7 @@ Path nearest_neighbor(const vector<Node>& node_list) {
     double res_distance = 0;
     vector<bool> visited(node_list.size(), false);
 
-    int current = 0; // Change this to a random number to get a different starting point
+    int current = 0;
 
     node_sequence.push_back(node_list[current]);
 
@@ -91,12 +92,13 @@ Path two_opt(const Path& path) {
     bool has_improved;
 
     // Open file and start timer, can be deleted
+    /*
     ofstream outfile;
     outfile.open("plot/data.txt");
     if (!outfile.is_open())
         cerr << "Unable to open file for writing.\n"; 
     auto start_time = chrono::high_resolution_clock::now();
-
+    */
     do {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
@@ -110,81 +112,82 @@ Path two_opt(const Path& path) {
                     two_opt_swap(current_sequence, i, j);
                     current_distance += delta;
                     has_improved = true;
+                    // Write data to file, can be deleted
+                    /*
+                    auto current_time = chrono::high_resolution_clock::now();
+                    chrono::duration<double> elapsed = current_time - start_time;
+                    outfile << elapsed.count() << " " << current_distance << endl;
+                    */
                 }
             }
         }
-        // Write data to file, can be deleted
-        auto current_time = chrono::high_resolution_clock::now();
-        chrono::duration<double> elapsed = current_time - start_time;
-        outfile << elapsed.count() << " " << current_distance << endl;
     } while (has_improved);
 
     return Path(current_distance, current_sequence);
 }
 
-void calcularDistancias(const vector<Node>& nodes, vector<vector<double>>& dist) {
-    int n = nodes.size();
-    dist.resize(n, vector<double>(n, 0.0));
-    for (int i = 0; i < n; ++i) {
-        for (int j = i + 1; j < n; ++j) {
-            double d = calculate_distance(nodes[i], nodes[j]);
-            dist[i][j] = dist[j][i] = d;
+Path farthest_insertion(vector<Node>& node_list) {
+    int n = node_list.size();
+    vector<Node> node_sequence;
+    double res_distance = 0;
+    vector<bool> visited(n, false);
+
+    node_sequence.push_back(node_list[0]);
+    node_sequence.push_back(node_list[1]);
+    node_sequence.push_back(node_list[2]);
+    visited[0] = visited[1] = visited[2] = true;
+
+    res_distance += calculate_distance(node_list[0], node_list[1]) + 
+                    calculate_distance(node_list[1], node_list[2]) + 
+                    calculate_distance(node_list[2], node_list[0]);
+
+    auto compare = [&](int i, int j) {
+        double max_dist_i = -1;
+        double max_dist_j = -1;
+
+        for (const auto& node : node_sequence) {
+            max_dist_i = max(max_dist_i, calculate_distance(node_list[i], node));
+            max_dist_j = max(max_dist_j, calculate_distance(node_list[j], node));
         }
-    }
-}
 
-void insercaoMaisDistante(vector<Node> nodes, vector<Node>& caminho, double& distancia_total) {
-    int n = nodes.size();
-    vector<bool> visitados(n, false);
+        return max_dist_i < max_dist_j;
+    };
 
-    caminho.push_back(nodes[0]);
-    caminho.push_back(nodes[1]);
-    caminho.push_back(nodes[2]);
-    visitados[0] = visitados[1] = visitados[2] = true;
+    priority_queue<int, vector<int>, decltype(compare)> pq(compare);
+
+    for (int i = 0; i < n; ++i)
+        if (!visited[i]) pq.push(i);
     
-    distancia_total += calculate_distance(nodes[0], nodes[1]) + 
-                        calculate_distance(nodes[1], nodes[2]) + 
-                        calculate_distance(nodes[2], nodes[0]);
 
-    while (caminho.size() < nodes.size()) {
+    while (node_sequence.size() < node_list.size()) {
+        int next = pq.top();
+        pq.pop();
 
-        int proximo_no = -1;
-        double maior_distancia_ao_caminho = -1;
+        double min_distance = numeric_limits<double>::max();
+        int opt_pos = -1;
 
-        for (int i = 0; i < n; ++i) {
-            if (visitados[i]) continue;
-            double maior_distancia = -1;
+        for (size_t j = 0; j < node_sequence.size(); ++j) {
+            int current = j;
+            int adjacent = (j + 1) % node_sequence.size();
 
-            for (const auto& node_caminho : caminho) {
-                maior_distancia = max(maior_distancia, calculate_distance(nodes[i], node_caminho));
-            }
+            double distance = calculate_distance(node_sequence[current], node_list[next]) +
+                              calculate_distance(node_list[next], node_sequence[adjacent]) - 
+                              calculate_distance(node_sequence[current], node_sequence[adjacent]);
 
-            if (maior_distancia > maior_distancia_ao_caminho) {
-                maior_distancia_ao_caminho = maior_distancia;
-                proximo_no = i;
-            }
-        }
-
-        double menor_custo_insercao = numeric_limits<double>::max();
-        int melhor_posicao = -1;
-
-        for (size_t j = 0; j < caminho.size(); ++j) {
-            int atual = j;
-            int seguinte = (j + 1) % caminho.size();
-            double custo_insercao = calculate_distance(caminho[atual], nodes[proximo_no]) +
-                                    calculate_distance(nodes[proximo_no], caminho[seguinte]) -
-                                    calculate_distance(caminho[atual], caminho[seguinte]);
-
-            if (custo_insercao < menor_custo_insercao) {
-                menor_custo_insercao = custo_insercao;
-                melhor_posicao = seguinte;
+            if (distance < min_distance) {
+                min_distance = distance;
+                opt_pos = adjacent;
             }
         }
 
-        caminho.insert(caminho.begin() + melhor_posicao, nodes[proximo_no]);
-        visitados[proximo_no] = true;
-        distancia_total += menor_custo_insercao;
+        node_sequence.insert(node_sequence.begin() + opt_pos, node_list[next]);
+        visited[next] = true;
+        res_distance += min_distance;
+
+        if (pq.empty()) break;
     }
+
+    return Path(res_distance, node_sequence);
 }
 
 double calcula_custo(const vector<Node>& caminho) {

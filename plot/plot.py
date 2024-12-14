@@ -10,7 +10,7 @@ with open('plot/data.txt', 'r') as f:
         y_vals.append(y)
 
 plt.plot(x_vals, y_vals)
-plt.xlabel('Tempo')
+plt.xlabel('Tempo (s)')
 plt.ylabel('Distância')
-plt.title('2-opt')
+plt.title('2-opt: Distância x Tempo')
 plt.savefig('plot/plot.png')

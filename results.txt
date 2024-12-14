@@ -1,4 +1,12 @@
 --------------------------------
+File path: instances/u574.tsp
+
+Nearest neighbor traveled distance: 46771.275636187536293
+Nearest neighbor execution time: 13ms
+
+2-opt traveled distance: 39785.405547989874322
+Nearest neighbor execution time: 44ms
+--------------------------------
 File path: instances/pcb1173.tsp
 
 Nearest neighbor traveled distance: 69086.789951756043592
@@ -54,4 +62,48 @@ Nearest neighbor execution time: 259399ms
 
 2-opt traveled distance: 150467538.926549255847931
 Nearest neighbor execution time: 1460112ms
+--------------------------------
+
+Farthest Insertion
+
+--------------------------------
+File path: instances/u574.tsp
+
+Farthest path traveled distance: 44486.534417401249812
+Farthest path execution time: 48ms
+--------------------------------
+File path: instances/pcb1173.tsp
+
+Farthest path traveled distance: 71820.099505007761763
+Farthest path execution time: 174ms
+--------------------------------
+File path: instances/pr1002.tsp
+
+Farthest path traveled distance: 320444.970209888124373
+Farthest path execution time: 123ms
+--------------------------------
+File path: instances/brd14051.tsp
+
+Farthest path traveled distance: 595025.831885727355257
+Farthest path execution time: 32273ms
+--------------------------------
+File path: instances/fnl4461.tsp
+
+Farthest path traveled distance: 225555.735852769546909
+Farthest path execution time: 2987ms
+--------------------------------
+File path: instances/d15112.tsp
+
+Farthest path traveled distance: 1960043.289891111431643
+Farthest path execution time: 37273ms
+--------------------------------
+File path: instances/pla33810.tsp
+
+Farthest path traveled distance: 78855242.059368059039116
+Farthest path execution time: 209585ms
+--------------------------------
+File path: instances/pla85900.tsp
+
+Farthest path traveled distance: 169359786.924563586711884
+Farthest path execution time: 1546158ms
 --------------------------------
