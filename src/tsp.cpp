@@ -109,7 +109,6 @@ Path two_opt(Path& path) {
                                + calculate_distance(current_sequence[i + 1], current_sequence[(j + 1) % path.size]);
 
                 if (delta < -1e-10) {
-                    cout << delta << endl;
                     two_opt_swap(current_sequence, i, j);
                     current_distance += delta;
                     has_improved = true;
@@ -224,21 +223,16 @@ double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, size
     return delta;
 }
 
-double calcula_custo(const vector<Node>& caminho) {
-    double custo_novo = 0.0;
-
-    for (size_t i = 0; i < caminho.size(); ++i) {
-        int prox_node = (i + 1) % caminho.size();
-        custo_novo += calculate_distance(caminho[i], caminho[prox_node]);
-    }
-
-    return custo_novo;
-}
-
 Path pair_swap(Path& path) {
     vector<Node> current_sequence = path.node_sequence;
     double current_distance = path.distance;
     bool has_improved;
+
+    ofstream outfile;
+    outfile.open("plot/data.txt");
+    if (!outfile.is_open())
+        cerr << "Unable to open file for writing.\n"; 
+    auto start_time = chrono::high_resolution_clock::now();
 
     do {
         has_improved = false;
@@ -249,16 +243,9 @@ Path pair_swap(Path& path) {
                 if (delta < -1e-10) {
                     swap(current_sequence[i], current_sequence[j]);
                     current_distance += delta;
-                    cout << i << " e " << j << " trocados" << endl;
-                    cout << "Delta: " << current_distance << endl;
-                    cout << "Actual cost: " << calcula_custo(current_sequence) << endl;
-                    /*
-                    cout << "---------------------------" << endl;
-                    cout << i << " e " << j << " trocados" << endl;
-                    for (Node node : current_sequence)
-                        node.print();
-                    cout << "---------------------------" << endl;
-                    */
+                    auto current_time = chrono::high_resolution_clock::now();
+                    chrono::duration<double> elapsed = current_time - start_time;
+                    outfile << elapsed.count() << " " << current_distance << endl;
                     has_improved = true;
                 }
             }

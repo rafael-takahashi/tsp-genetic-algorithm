@@ -1,3 +1,5 @@
+Nearest Neighbor + 2-opt:
+
 --------------------------------
 File path: instances/u574.tsp
 
@@ -106,4 +108,72 @@ File path: instances/pla85900.tsp
 
 Farthest insertion traveled distance: 169359786.924563586711884
 Farthest insertion execution time: 1546158ms
+--------------------------------
+
+Nearest Neighbor + Pair Swap
+
+--------------------------------
+File path: instances/u574.tsp
+
+Nearest neighbor traveled distance: 46771.275636187536293
+Nearest neighbor execution time: 14ms
+
+Pair Swap traveled distance: 45785.726559368100425
+Pair Swap execution time: 66ms
+--------------------------------
+File path: instances/pcb1173.tsp
+
+Nearest neighbor traveled distance: 69086.789951756043592
+Nearest neighbor execution time: 59ms
+
+Pair Swap traveled distance: 66264.909568269489682
+Pair Swap execution time: 278ms
+--------------------------------
+File path: instances/pr1002.tsp
+
+Nearest neighbor traveled distance: 310683.085587995476089
+Nearest neighbor execution time: 39ms
+
+Pair Swap traveled distance: 300352.427027762401849
+Pair Swap execution time: 190ms
+--------------------------------
+File path: instances/brd14051.tsp
+
+Nearest neighbor traveled distance: 574366.348537088022567
+Nearest neighbor execution time: 7644ms
+
+Pair Swap traveled distance: 557670.926751885446720
+Pair Swap execution time: 55893ms
+--------------------------------
+File path: instances/fnl4461.tsp
+
+Nearest neighbor traveled distance: 223621.754712273977930
+Nearest neighbor execution time: 777ms
+
+Pair Swap traveled distance: 215351.895009025174659
+Pair Swap execution time: 4892ms
+--------------------------------
+File path: instances/d15112.tsp
+
+Nearest neighbor traveled distance: 1938673.298909092089161
+Nearest neighbor execution time: 10004ms
+
+Pair Swap traveled distance: 1885705.808591477340087
+Pair Swap execution time: 55361ms
+--------------------------------
+File path: instances/pla33810.tsp
+
+Nearest neighbor traveled distance: 77236153.474480345845222
+Nearest neighbor execution time: 42257ms
+
+Pair Swap traveled distance: 75842738.502600774168968
+Pair Swap execution time: 632527ms
+--------------------------------
+File path: instances/pla85900.tsp
+
+Nearest neighbor traveled distance: 163054411.639323621988297
+Nearest neighbor execution time: 260562ms
+
+Pair Swap traveled distance: 160123402.151082247495651
+Pair Swap execution time: 4206527ms
 --------------------------------
