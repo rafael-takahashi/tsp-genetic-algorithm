@@ -66,50 +66,6 @@ Nearest neighbor execution time: 259399ms
 Nearest neighbor execution time: 1460112ms
 --------------------------------
 
-Farthest Insertion
-
---------------------------------
-File path: instances/u574.tsp
-
-Farthest insertion traveled distance: 44486.534417401249812
-Farthest insertion execution time: 48ms
---------------------------------
-File path: instances/pcb1173.tsp
-
-Farthest insertion traveled distance: 71820.099505007761763
-Farthest insertion execution time: 174ms
---------------------------------
-File path: instances/pr1002.tsp
-
-Farthest insertion traveled distance: 320444.970209888124373
-Farthest insertion execution time: 123ms
---------------------------------
-File path: instances/brd14051.tsp
-
-Farthest insertion traveled distance: 595025.831885727355257
-Farthest insertion execution time: 32273ms
---------------------------------
-File path: instances/fnl4461.tsp
-
-Farthest insertion traveled distance: 225555.735852769546909
-Farthest insertion execution time: 2987ms
---------------------------------
-File path: instances/d15112.tsp
-
-Farthest insertion traveled distance: 1960043.289891111431643
-Farthest insertion execution time: 37273ms
---------------------------------
-File path: instances/pla33810.tsp
-
-Farthest insertion traveled distance: 78855242.059368059039116
-Farthest insertion execution time: 209585ms
---------------------------------
-File path: instances/pla85900.tsp
-
-Farthest insertion traveled distance: 169359786.924563586711884
-Farthest insertion execution time: 1546158ms
---------------------------------
-
 Nearest Neighbor + Pair Swap
 
 --------------------------------
@@ -176,4 +132,72 @@ Nearest neighbor execution time: 260562ms
 
 Pair Swap traveled distance: 160123402.151082247495651
 Pair Swap execution time: 4206527ms
+--------------------------------
+
+Farthest Insertion + Pair Swap
+
+--------------------------------
+File path: instances/u574.tsp
+
+Farthest insertion traveled distance: 44486.534417401249812
+Farthest insertion execution time: 51ms
+
+Pair Swap traveled distance: 43197.047143411633442
+Pair Swap execution time: 59ms
+--------------------------------
+File path: instances/pcb1173.tsp
+
+Farthest insertion traveled distance: 71820.099505007761763
+Farthest insertion execution time: 205ms
+
+Pair Swap traveled distance: 69602.597468260137248
+Pair Swap execution time: 244ms
+--------------------------------
+File path: instances/pr1002.tsp
+
+Farthest insertion traveled distance: 320444.970209888124373
+Farthest insertion execution time: 150ms
+
+Pair Swap traveled distance: 309236.588480911217630
+Pair Swap execution time: 208ms
+--------------------------------
+File path: instances/brd14051.tsp
+
+Farthest insertion traveled distance: 595025.831885727355257
+Farthest insertion execution time: 34424ms
+
+Pair Swap traveled distance: 571148.034795171231963
+Pair Swap execution time: 45929ms
+--------------------------------
+File path: instances/fnl4461.tsp
+
+Farthest insertion traveled distance: 225555.735852769546909
+Farthest insertion execution time: 3287ms
+
+Pair Swap traveled distance: 218255.352443852956640
+Pair Swap execution time: 5219ms
+--------------------------------
+File path: instances/d15112.tsp
+
+Farthest insertion traveled distance: 1960043.289891111431643
+Farthest insertion execution time: 40978ms
+
+Pair Swap traveled distance: 1894611.320042182458565
+Pair Swap execution time: 71645ms
+--------------------------------
+File path: instances/pla33810.tsp
+
+Farthest insertion traveled distance: 78855242.059368059039116
+Farthest insertion execution time: 248082ms
+
+Pair Swap traveled distance: 77113833.897303953766823
+Pair Swap execution time: 333776ms
+--------------------------------
+File path: instances/pla85900.tsp
+
+Farthest insertion traveled distance: 169359786.924563586711884
+Farthest insertion execution time: 1566754ms
+
+Pair Swap traveled distance: 165995622.820640355348587
+Pair Swap execution time: 4340234ms
 --------------------------------

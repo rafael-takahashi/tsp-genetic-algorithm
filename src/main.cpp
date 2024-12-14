@@ -17,12 +17,12 @@ int main() {
           "instances/pla85900.tsp"
      };
 
-     //for (size_t i = 0; i < instances_file_paths.size(); i++) {
-          string file_path = "instances/pla33810.tsp";
+     for (size_t i = 0; i < instances_file_paths.size(); i++) {
+          string file_path = instances_file_paths[i];
           cout << "--------------------------------\nFile path: " << file_path << "\n";
 
           vector<Node> node_list = tsp_to_vector(file_path);
-          
+          /*
           auto start = chrono::high_resolution_clock::now();
           Path nearest_neighbor_path = nearest_neighbor(node_list);
           auto elapsed = chrono::high_resolution_clock::now();
@@ -33,7 +33,7 @@ int main() {
           cout << "Nearest neighbor execution time: " 
                << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
                << "ms\n";
-          /*
+          */
           auto start = chrono::high_resolution_clock::now();
           Path farthest_insertion_path = farthest_insertion(node_list);
           auto elapsed = chrono::high_resolution_clock::now();
@@ -44,7 +44,7 @@ int main() {
           cout << "Farthest insertion execution time: " 
                << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
                << "ms\n";
- 
+          /*
           start = chrono::high_resolution_clock::now();
           Path two_opt_path = two_opt(farthest_insertion_path);
           elapsed = chrono::high_resolution_clock::now();
@@ -57,7 +57,7 @@ int main() {
                << "ms\n";
           */
           start = chrono::high_resolution_clock::now();
-          Path pair_swap_path = pair_swap(nearest_neighbor_path);
+          Path pair_swap_path = pair_swap(farthest_insertion_path);
           elapsed = chrono::high_resolution_clock::now();
 
           cout << "\nPair Swap traveled distance: " 
@@ -67,7 +67,7 @@ int main() {
                << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
                << "ms\n";
                
-     //}
+     }
      cout << "--------------------------------\n";
 
      return 0; 
