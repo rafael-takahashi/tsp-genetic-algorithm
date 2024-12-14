@@ -1,11 +1,11 @@
 #include "tsp.h"
-#include <algorithm>
-#include <chrono>
-#include <cmath>
+
+//#include <chrono>
 #include <fstream>
-#include <queue>
 #include <limits>
+#include <queue>
 #include <sstream>
+
 #include "node.h"
 
 using namespace std;
@@ -77,55 +77,6 @@ Path nearest_neighbor(vector<Node>& node_list) {
     return Path(res_distance, node_sequence);
 }
 
-void two_opt_swap(vector<Node>& sequence, unsigned int first, unsigned int second) {
-    first++;
-    while (first < second) {
-        swap(sequence[first], sequence[second]);
-        first++;
-        second--;
-    }
-}
-
-Path two_opt(Path& path) {
-    vector<Node> current_sequence = path.node_sequence;
-    double current_distance = path.distance;
-    bool has_improved;
-
-    // Open file and start timer, can be deleted
-    /*
-    ofstream outfile;
-    outfile.open("plot/data.txt");
-    if (!outfile.is_open())
-        cerr << "Unable to open file for writing.\n"; 
-    auto start_time = chrono::high_resolution_clock::now();
-    */
-    do {
-        has_improved = false;
-        for (size_t i = 0; i < path.size - 1; i++) {
-            for (size_t j = i + 2; j < path.size; j++) {
-                double delta = - calculate_distance(current_sequence[i], current_sequence[i + 1])
-                               - calculate_distance(current_sequence[j], current_sequence[(j + 1) % path.size])
-                               + calculate_distance(current_sequence[i], current_sequence[j])
-                               + calculate_distance(current_sequence[i + 1], current_sequence[(j + 1) % path.size]);
-
-                if (delta < -1e-10) {
-                    two_opt_swap(current_sequence, i, j);
-                    current_distance += delta;
-                    has_improved = true;
-                    // Write data to file, can be deleted
-                    /*
-                    auto current_time = chrono::high_resolution_clock::now();
-                    chrono::duration<double> elapsed = current_time - start_time;
-                    outfile << elapsed.count() << " " << current_distance << endl;
-                    */
-                }
-            }
-        }
-    } while (has_improved);
-
-    return Path(current_distance, current_sequence);
-}
-
 Path farthest_insertion(vector<Node>& node_list) {
     vector<Node> node_sequence;
     double res_distance = 0;
@@ -188,6 +139,54 @@ Path farthest_insertion(vector<Node>& node_list) {
     return Path(res_distance, node_sequence);
 }
 
+void two_opt_swap(vector<Node>& sequence, unsigned int first, unsigned int second) {
+    first++;
+    while (first < second) {
+        swap(sequence[first], sequence[second]);
+        first++;
+        second--;
+    }
+}
+
+Path two_opt(Path& path) {
+    vector<Node> current_sequence = path.node_sequence;
+    double current_distance = path.distance;
+    bool has_improved;
+    // Open file and start timer, can be deleted
+    /*
+    ofstream outfile;
+    outfile.open("plot/data.txt");
+    if (!outfile.is_open())
+        cerr << "Unable to open file for writing.\n"; 
+    auto start_time = chrono::high_resolution_clock::now();
+    */
+    do {
+        has_improved = false;
+        for (size_t i = 0; i < path.size - 1; i++) {
+            for (size_t j = i + 2; j < path.size; j++) {
+                double delta = - calculate_distance(current_sequence[i], current_sequence[i + 1])
+                               - calculate_distance(current_sequence[j], current_sequence[(j + 1) % path.size])
+                               + calculate_distance(current_sequence[i], current_sequence[j])
+                               + calculate_distance(current_sequence[i + 1], current_sequence[(j + 1) % path.size]);
+
+                if (delta < -1e-10) {
+                    two_opt_swap(current_sequence, i, j);
+                    current_distance += delta;
+                    has_improved = true;
+                    // Write data to file, can be deleted
+                    /*
+                    auto current_time = chrono::high_resolution_clock::now();
+                    chrono::duration<double> elapsed = current_time - start_time;
+                    outfile << elapsed.count() << " " << current_distance << endl;
+                    */
+                }
+            }
+        }
+    } while (has_improved);
+
+    return Path(current_distance, current_sequence);
+}
+
 double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, size_t path_size) {
     int prev_i = (i - 1 + path_size) % path_size;
     int next_i = (i + 1) % path_size;
@@ -227,13 +226,13 @@ Path pair_swap(Path& path) {
     vector<Node> current_sequence = path.node_sequence;
     double current_distance = path.distance;
     bool has_improved;
-
+    /*  
     ofstream outfile;
     outfile.open("plot/data.txt");
     if (!outfile.is_open())
         cerr << "Unable to open file for writing.\n"; 
     auto start_time = chrono::high_resolution_clock::now();
-
+    */
     do {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
@@ -243,9 +242,11 @@ Path pair_swap(Path& path) {
                 if (delta < -1e-10) {
                     swap(current_sequence[i], current_sequence[j]);
                     current_distance += delta;
+                    /* 
                     auto current_time = chrono::high_resolution_clock::now();
                     chrono::duration<double> elapsed = current_time - start_time;
                     outfile << elapsed.count() << " " << current_distance << endl;
+                    */
                     has_improved = true;
                 }
             }

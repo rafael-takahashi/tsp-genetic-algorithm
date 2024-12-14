@@ -1,4 +1,5 @@
 #include "node.h"
+
 #include <math.h>
 
 double calculate_distance(Node A, Node B) {
