@@ -69,41 +69,41 @@ Farthest Insertion
 --------------------------------
 File path: instances/u574.tsp
 
-Farthest path traveled distance: 44486.534417401249812
-Farthest path execution time: 48ms
+Farthest insertion traveled distance: 44486.534417401249812
+Farthest insertion execution time: 48ms
 --------------------------------
 File path: instances/pcb1173.tsp
 
-Farthest path traveled distance: 71820.099505007761763
-Farthest path execution time: 174ms
+Farthest insertion traveled distance: 71820.099505007761763
+Farthest insertion execution time: 174ms
 --------------------------------
 File path: instances/pr1002.tsp
 
-Farthest path traveled distance: 320444.970209888124373
-Farthest path execution time: 123ms
+Farthest insertion traveled distance: 320444.970209888124373
+Farthest insertion execution time: 123ms
 --------------------------------
 File path: instances/brd14051.tsp
 
-Farthest path traveled distance: 595025.831885727355257
-Farthest path execution time: 32273ms
+Farthest insertion traveled distance: 595025.831885727355257
+Farthest insertion execution time: 32273ms
 --------------------------------
 File path: instances/fnl4461.tsp
 
-Farthest path traveled distance: 225555.735852769546909
-Farthest path execution time: 2987ms
+Farthest insertion traveled distance: 225555.735852769546909
+Farthest insertion execution time: 2987ms
 --------------------------------
 File path: instances/d15112.tsp
 
-Farthest path traveled distance: 1960043.289891111431643
-Farthest path execution time: 37273ms
+Farthest insertion traveled distance: 1960043.289891111431643
+Farthest insertion execution time: 37273ms
 --------------------------------
 File path: instances/pla33810.tsp
 
-Farthest path traveled distance: 78855242.059368059039116
-Farthest path execution time: 209585ms
+Farthest insertion traveled distance: 78855242.059368059039116
+Farthest insertion execution time: 209585ms
 --------------------------------
 File path: instances/pla85900.tsp
 
-Farthest path traveled distance: 169359786.924563586711884
-Farthest path execution time: 1546158ms
+Farthest insertion traveled distance: 169359786.924563586711884
+Farthest insertion execution time: 1546158ms
 --------------------------------

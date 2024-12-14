@@ -48,8 +48,8 @@ int main() {
     cout << "--------------------------------\n";
      */
 
-     for (size_t i = 0; i < instances_file_paths.size(); i++) {
-          string file_path = instances_file_paths[i];
+     //for (size_t i = 0; i < instances_file_paths.size(); i++) {
+          string file_path = "instances/pr1002.tsp";
           cout << "--------------------------------\nFile path: " << file_path << "\n";
 
           vector<Node> node_list = tsp_to_vector(file_path);
@@ -64,7 +64,22 @@ int main() {
           cout << "Farthest insertion execution time: " 
                << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
                << "ms\n";
-     }
+          
+          //for (Node node : farthest_insertion_path.node_sequence)
+            //   node.print();
+
+          start = chrono::high_resolution_clock::now();
+          Path res = pair_swap(farthest_insertion_path);
+          elapsed = chrono::high_resolution_clock::now();
+
+          cout << "\nPair Swap traveled distance: " 
+               << fixed << setprecision(15) 
+               << res.distance << "\n";
+          cout << "Pair Swap execution time: " 
+               << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
+               << "ms\n";
+          
+     //}
      cout << "--------------------------------\n";
 
      return 0; 

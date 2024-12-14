@@ -43,7 +43,7 @@ vector<Node> tsp_to_vector(string& file_path) {
     return node_list;
 }
 
-Path nearest_neighbor(const vector<Node>& node_list) {
+Path nearest_neighbor(vector<Node>& node_list) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<bool> visited(node_list.size(), false);
@@ -86,7 +86,7 @@ void two_opt_swap(vector<Node>& sequence, unsigned int first, unsigned int secon
     }
 }
 
-Path two_opt(const Path& path) {
+Path two_opt(Path& path) {
     vector<Node> current_sequence = path.node_sequence;
     double current_distance = path.distance;
     bool has_improved;
@@ -108,7 +108,8 @@ Path two_opt(const Path& path) {
                                + calculate_distance(current_sequence[i], current_sequence[j])
                                + calculate_distance(current_sequence[i + 1], current_sequence[(j + 1) % path.size]);
 
-                if (delta < 0 && delta < -1e-10) {
+                if (delta < -1e-10) {
+                    cout << delta << endl;
                     two_opt_swap(current_sequence, i, j);
                     current_distance += delta;
                     has_improved = true;
@@ -127,10 +128,9 @@ Path two_opt(const Path& path) {
 }
 
 Path farthest_insertion(vector<Node>& node_list) {
-    int n = node_list.size();
     vector<Node> node_sequence;
     double res_distance = 0;
-    vector<bool> visited(n, false);
+    vector<bool> visited(node_list.size(), false);
 
     node_sequence.push_back(node_list[0]);
     node_sequence.push_back(node_list[1]);
@@ -155,9 +155,8 @@ Path farthest_insertion(vector<Node>& node_list) {
 
     priority_queue<int, vector<int>, decltype(compare)> pq(compare);
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < node_list.size(); ++i)
         if (!visited[i]) pq.push(i);
-    
 
     while (node_sequence.size() < node_list.size()) {
         int next = pq.top();
@@ -190,6 +189,41 @@ Path farthest_insertion(vector<Node>& node_list) {
     return Path(res_distance, node_sequence);
 }
 
+double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, size_t path_size) {
+    int prev_i = (i - 1 + path_size) % path_size;
+    int next_i = (i + 1) % path_size;
+    int prev_j = (j - 1 + path_size) % path_size;
+    int next_j = (j + 1) % path_size;
+
+    double delta;
+
+    // Handle case where i and j are the first and last nodes of the path;
+    if (i == 0 && j == path_size - 1) {
+        delta = - calculate_distance(node_sequence[i], node_sequence[next_i])
+                - calculate_distance(node_sequence[prev_j], node_sequence[j])
+                + calculate_distance(node_sequence[j], node_sequence[next_i])
+                + calculate_distance(node_sequence[prev_j], node_sequence[i]);
+
+        return delta;
+    } 
+    
+    delta = - calculate_distance(node_sequence[prev_i], node_sequence[i])
+            - calculate_distance(node_sequence[j], node_sequence[next_j])
+            + calculate_distance(node_sequence[prev_i], node_sequence[j])
+            + calculate_distance(node_sequence[i], node_sequence[next_j]);
+
+    // If the i and j are adjacent, then delta is succefully calculated
+    if (i + 1 == j)
+        return delta;
+
+    delta += - calculate_distance(node_sequence[i], node_sequence[next_i])
+            - calculate_distance(node_sequence[prev_j], node_sequence[j])
+            + calculate_distance(node_sequence[j], node_sequence[next_i])
+            + calculate_distance(node_sequence[prev_j], node_sequence[i]);
+    
+    return delta;
+}
+
 double calcula_custo(const vector<Node>& caminho) {
     double custo_novo = 0.0;
 
@@ -201,40 +235,35 @@ double calcula_custo(const vector<Node>& caminho) {
     return custo_novo;
 }
 
-vector<Node> troca_pares(vector<Node> caminho, double& custo) {
-    int iteracoes_sem_melhoria = 0;
-    int iteracoes_maximas = 0;
+Path pair_swap(Path& path) {
+    vector<Node> current_sequence = path.node_sequence;
+    double current_distance = path.distance;
+    bool has_improved;
 
-    while (iteracoes_sem_melhoria < 5 && iteracoes_maximas < 25) {
-        bool houve_melhoria = false;
+    do {
+        has_improved = false;
+        for (size_t i = 0; i < path.size - 1; i++) {
+            for (size_t j = i + 1; j < path.size; j++) {
+                double delta = calculate_pair_swap_delta(i, j, current_sequence, path.size);
 
-        size_t i = 0;
-        while (i < caminho.size() && !houve_melhoria) {
-            size_t j = i + 1;
-            while (j < caminho.size() && !houve_melhoria) {
-                swap(caminho[i], caminho[j]);
-
-                double custo_apos_troca = calcula_custo(caminho);
-
-                if (custo_apos_troca < custo) {
-                    custo = custo_apos_troca;
-                    houve_melhoria = true;
-                    iteracoes_sem_melhoria = 0;
-
-                    cout << "Novo custo: " << custo << endl;
-                } else {
-                    swap(caminho[i], caminho[j]);
+                if (delta < -1e-10) {
+                    swap(current_sequence[i], current_sequence[j]);
+                    current_distance += delta;
+                    cout << i << " e " << j << " trocados" << endl;
+                    cout << "Delta: " << current_distance << endl;
+                    cout << "Actual cost: " << calcula_custo(current_sequence) << endl;
+                    /*
+                    cout << "---------------------------" << endl;
+                    cout << i << " e " << j << " trocados" << endl;
+                    for (Node node : current_sequence)
+                        node.print();
+                    cout << "---------------------------" << endl;
+                    */
+                    has_improved = true;
                 }
-                ++j;
             }
-            ++i;
         }
-
-        if (!houve_melhoria) {
-            iteracoes_sem_melhoria++;
-        }
-        iteracoes_maximas++;
-    }
-
-    return caminho;
+    } while (has_improved);
+    
+    return Path(current_distance, current_sequence);
 }
