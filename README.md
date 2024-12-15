@@ -9,6 +9,9 @@ Este projeto implementa algoritmos que encontram soluções para o Problema do C
 
 ## Como utilizar o código
 
+### Instâncias
+Insira na pasta "instances" as instâncias de problema TSP que deseja utilizar.
+
 ### Compilação
 No terminal, compile o código utilizando:
 

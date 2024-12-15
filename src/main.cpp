@@ -64,48 +64,53 @@ int main() {
                }
           } while (!valid_choice);
 
+          char repeat_local_search;
           do {
-               cout << "Escolha o algoritmo melhorativo:\n1. Pair Swap\n2. 2-opt\n";
-               cin >> choice;
+               do {
+                    cout << "Escolha o algoritmo melhorativo:\n1. Pair Swap\n2. 2-opt\n";
+                    cin >> choice;
 
-               if (cin.fail()) {
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Entrada inválida. Digite 1 ou 2.\n";
-                    continue;
-               }
+                    if (cin.fail()) {
+                         cin.clear();
+                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                         cout << "Entrada inválida. Digite 1 ou 2.\n";
+                         continue;
+                    }
 
-               valid_choice = true;
+                    valid_choice = true;
 
-               if (choice == 1) {
-                    auto ps_start = chrono::high_resolution_clock::now();
-                    Path pair_swap_path = pair_swap(constructed_path);
-                    auto ps_elapsed = chrono::high_resolution_clock::now();
-                    cout << "--------------------------------\n";
-                    cout << "Pair Swap - Distância obtida: " 
-                         << fixed << setprecision(15) 
-                         << pair_swap_path.distance << "\n";
-                    cout << "Pair Swap - Tempo de execução: " 
-                         << chrono::duration_cast<chrono::milliseconds>(ps_elapsed - ps_start).count() 
-                         << "ms\n";
-                    cout << "--------------------------------\n";
-               } else if (choice == 2) {
-                    auto two_opt_start = chrono::high_resolution_clock::now();
-                    Path two_opt_path = two_opt(constructed_path);
-                    auto two_opt_elapsed = chrono::high_resolution_clock::now();
-                    cout << "--------------------------------\n";
-                    cout << "2-opt - Distância obtida: " 
-                         << fixed << setprecision(15) 
-                         << two_opt_path.distance << '\n';
-                    cout << "2-opt - Tempo de execução: " 
-                         << chrono::duration_cast<chrono::milliseconds>(two_opt_elapsed - two_opt_start).count() 
-                         << "ms\n";
-                    cout << "--------------------------------\n";
-               } else {
-                    cout << "Entrada inválida. Digite 1 ou 2.\n";
-                    valid_choice = false;
-               }
-          } while (!valid_choice);
+                    if (choice == 1) {
+                         auto ps_start = chrono::high_resolution_clock::now();
+                         Path pair_swap_path = pair_swap(constructed_path);
+                         auto ps_elapsed = chrono::high_resolution_clock::now();
+                         cout << "--------------------------------\n";
+                         cout << "Pair Swap - Distância obtida: " 
+                              << fixed << setprecision(15) 
+                              << pair_swap_path.distance << "\n";
+                         cout << "Pair Swap - Tempo de execução: " 
+                              << chrono::duration_cast<chrono::milliseconds>(ps_elapsed - ps_start).count() 
+                              << "ms\n";
+                         cout << "--------------------------------\n";
+                    } else if (choice == 2) {
+                         auto two_opt_start = chrono::high_resolution_clock::now();
+                         Path two_opt_path = two_opt(constructed_path);
+                         auto two_opt_elapsed = chrono::high_resolution_clock::now();
+                         cout << "--------------------------------\n";
+                         cout << "2-opt - Distância obtida: " 
+                              << fixed << setprecision(15) 
+                              << two_opt_path.distance << '\n';
+                         cout << "2-opt - Tempo de execução: " 
+                              << chrono::duration_cast<chrono::milliseconds>(two_opt_elapsed - two_opt_start).count() 
+                              << "ms\n";
+                         cout << "--------------------------------\n";
+                    } else {
+                         cout << "Entrada inválida. Digite 1 ou 2.\n";
+                         valid_choice = false;
+                    }
+               } while (!valid_choice);
+               cout << "Deseja executar outro algoritmo melhorativo para este caminho? (y/n): ";
+               cin >> repeat_local_search;
+          } while (repeat_local_search == 'y' || repeat_local_search == 'Y') ;
           cout << "Deseja executar outra instância? (y/n): ";
           cin >> repeat;
      } while (repeat == 'y' || repeat == 'Y');

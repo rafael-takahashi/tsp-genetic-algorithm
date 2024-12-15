@@ -152,13 +152,6 @@ Path two_opt(Path& path) {
     vector<Node> current_sequence = path.node_sequence;
     double current_distance = path.distance;
     bool has_improved;
-    // Open file and start timer, can be deleted
-    
-    ofstream outfile;
-    outfile.open("plot/data.txt");
-    if (!outfile.is_open())
-        cerr << "Unable to open file for writing.\n"; 
-    auto start_time = chrono::high_resolution_clock::now();
     
     do {
         has_improved = false;
@@ -173,12 +166,6 @@ Path two_opt(Path& path) {
                     two_opt_swap(current_sequence, i, j);
                     current_distance += delta;
                     has_improved = true;
-                    // Write data to file, can be deleted
-                    
-                    auto current_time = chrono::high_resolution_clock::now();
-                    chrono::duration<double> elapsed = current_time - start_time;
-                    outfile << elapsed.count() << " " << current_distance << endl;
-                    
                 }
             }
         }
@@ -226,13 +213,7 @@ Path pair_swap(Path& path) {
     vector<Node> current_sequence = path.node_sequence;
     double current_distance = path.distance;
     bool has_improved;
-    /*  
-    ofstream outfile;
-    outfile.open("plot/data.txt");
-    if (!outfile.is_open())
-        cerr << "Unable to open file for writing.\n"; 
-    auto start_time = chrono::high_resolution_clock::now();
-    */
+    
     do {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
@@ -242,11 +223,6 @@ Path pair_swap(Path& path) {
                 if (delta < -1e-10) {
                     swap(current_sequence[i], current_sequence[j]);
                     current_distance += delta;
-                    /* 
-                    auto current_time = chrono::high_resolution_clock::now();
-                    chrono::duration<double> elapsed = current_time - start_time;
-                    outfile << elapsed.count() << " " << current_distance << endl;
-                    */
                     has_improved = true;
                 }
             }
