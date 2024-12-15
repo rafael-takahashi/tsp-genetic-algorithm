@@ -1,11 +1,21 @@
-# Traveling Salesman Problem
+# Problema do Caixeiro Viajante
 
-This project implements a solution to the Traveling Salesman Problem (TSP) using the Nearest Neighbor and the 2-opt Algorithms.
+Este projeto implementa algoritmos que encontram soluções para o Problema do Caixeiro Viajante (TSP) utilizando heurísticas construtivas e de busca local:
 
-## Compilation
+- Vizinho mais próximo
+- Inserção mais distante
+- 2-Opt
+- Pair Swap
 
-In the terminal, run the following command to compile the project:
+## Como utilizar o código
+
+### Compilação
+No terminal, compile o código utilizando:
 
 ```
     g++ src/*.cpp
 ```
+
+### Execução
+
+Execute o arquivo de saída gerado e siga as instruções da interface.
