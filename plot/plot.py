@@ -9,8 +9,8 @@ with open('plot/data.txt', 'r') as f:
         x_vals.append(x)
         y_vals.append(y)
 
-plt.plot(x_vals, y_vals, color='red')
+plt.plot(x_vals, y_vals)
 plt.xlabel('Tempo (s)')
 plt.ylabel('Distância')
-plt.title('Pair Swap: Distância x Tempo')
+plt.title('2-opt: Distância x Tempo')
 plt.savefig('plot/plot.png')

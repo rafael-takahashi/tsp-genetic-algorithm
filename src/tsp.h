@@ -5,9 +5,11 @@
 #include "node.h"
 
 struct Path {
-    double distance;
-    std::vector<Node> node_sequence;
-    size_t size;
+    double distance = 0.0;
+    std::vector<Node> node_sequence = {};
+    size_t size = 0;
+
+    Path() = default;
 
     Path(double distance, std::vector<Node>& sequence)
         : distance(distance), 

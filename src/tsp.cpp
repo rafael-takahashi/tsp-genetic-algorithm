@@ -1,6 +1,6 @@
 #include "tsp.h"
 
-//#include <chrono>
+#include <chrono>
 #include <fstream>
 #include <limits>
 #include <queue>
@@ -100,12 +100,12 @@ Path farthest_insertion(vector<Node>& node_list) {
             max_dist_j = max(max_dist_j, calculate_distance(node_list[j], node));
         }
 
-        return max_dist_i < max_dist_j;
+        return max_dist_i > max_dist_j;
     };
 
     priority_queue<int, vector<int>, decltype(compare)> pq(compare);
 
-    for (int i = 0; i < node_list.size(); ++i)
+    for (int i = 0; i < node_list.size(); i++)
         if (!visited[i]) pq.push(i);
 
     while (node_sequence.size() < node_list.size()) {
@@ -153,13 +153,13 @@ Path two_opt(Path& path) {
     double current_distance = path.distance;
     bool has_improved;
     // Open file and start timer, can be deleted
-    /*
+    
     ofstream outfile;
     outfile.open("plot/data.txt");
     if (!outfile.is_open())
         cerr << "Unable to open file for writing.\n"; 
     auto start_time = chrono::high_resolution_clock::now();
-    */
+    
     do {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
@@ -174,11 +174,11 @@ Path two_opt(Path& path) {
                     current_distance += delta;
                     has_improved = true;
                     // Write data to file, can be deleted
-                    /*
+                    
                     auto current_time = chrono::high_resolution_clock::now();
                     chrono::duration<double> elapsed = current_time - start_time;
                     outfile << elapsed.count() << " " << current_distance << endl;
-                    */
+                    
                 }
             }
         }
