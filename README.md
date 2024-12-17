@@ -10,7 +10,7 @@ Este projeto implementa algoritmos que encontram soluções para o Problema do C
 ## Como utilizar o código
 
 ### Instâncias
-Insira na pasta "instances" as instâncias de problema TSP que deseja utilizar.
+O programa executa uma instância de sua escolha por vez. Só poderá ser escolhida a instância se ela estiver disponível na pasta "instances". Dessa forma, caso deseje testar uma instância diferente, ela deve estar dentro da pasta "instances".
 
 ### Compilação
 No terminal, compile o código utilizando:
