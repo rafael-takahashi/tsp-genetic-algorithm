@@ -2,10 +2,20 @@
 #include <iomanip>
 
 #include "tsp.h"
+#include "genetic.h"
 
 using namespace std;
 
 int main() {
+     string file_path = "instances/pla85900.tsp";
+     vector<Node> node_list = tsp_to_vector(file_path);
+
+     Path constructed_path = generate_random_path(node_list, 41);
+
+     cout << constructed_path.node_sequence.size() << '\n';
+     cout << fixed << setprecision(15) << constructed_path.distance << '\n';
+
+     /*
      char repeat;
      do {
           string file_name; 
@@ -114,6 +124,6 @@ int main() {
           cout << "Deseja executar outra instância? (y/n): ";
           cin >> repeat;
      } while (repeat == 'y' || repeat == 'Y');
-     
+     */
     return 0;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <iomanip>
 
 struct Node {
     int id;
@@ -9,7 +10,9 @@ struct Node {
     Node(int id, double x, double y) : id(id), x(x), y(y) {}
 
     void print() const {
-        std::cout << "Node " << id << ": (" << x << ", " << y << ")" << std::endl;
+        std::cout << "Node " << id << ": ("
+              << std::fixed << std::setprecision(15) << x << ", "
+              << std::fixed << std::setprecision(15) << y << ")" << std::endl;
     }
 };
 
