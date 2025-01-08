@@ -1,6 +1,7 @@
 #include "genetic.h"
 
 #include <random>
+#include <algorithm>
 
 using namespace std;
 
@@ -52,4 +53,46 @@ std::vector<Node> tournament_selection(const std::vector<std::vector<Node>>& pop
     }
 
     return population[best_index];
+}
+
+vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2){
+    int size = parent1.size();
+
+    int cut_point1 = rand() % size;
+    int cut_point2 = rand() % (size - cut_point1);
+
+    cout << "Cut point 1: " << cut_point1 << endl;
+    cout << "Cut point 2: " << cut_point2 << endl;
+
+    vector<int> child1(size, -1);
+    vector<int> child2(size, -1);
+
+    for(int i = cut_point1; i < cut_point2; i++){
+        child1[i] = parent1[i];
+        child2[i] = parent2[i];
+    }
+
+    int pointer1 = cut_point2;
+    for(int i = 0; i < size; i++){
+        if((find(child1.begin(), child1.end(), parent2[i]) == child1.end())){
+            if(pointer1 >= size){
+                pointer1 = 0;
+            }
+            child1[pointer1] = parent2[i];
+            pointer1++;
+        }
+    }
+
+    int pointer2 = cut_point2;
+    for(int i = 0; i < size; i++){
+        if((find(child2.begin(), child2.end(), parent1[i]) == child2.end())){
+            if(pointer2 >= size){
+                pointer2 = 0;
+            }
+            child2[pointer1] = parent1[i];
+            pointer2++;
+        }
+    }
+
+    return child1, child2;
 }
