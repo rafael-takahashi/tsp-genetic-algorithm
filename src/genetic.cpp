@@ -33,3 +33,23 @@ Path generate_random_path(std::vector<Node>& node_list, unsigned int seed) {
 
     return Path(res_distance, node_sequence);
 }
+
+
+double fitness_evaluation(Path path){
+    return 1/path.distance;
+}
+
+std::vector<Node> tournament_selection(const std::vector<std::vector<Node>>& population, const std::vector<double>& fitnesses, int tournament_size = 3){
+    int best_index = -1;
+    double best_fitness = -1.0;
+
+    for(int i =0; i < tournament_size; i++){
+        int index = rand() % population.size();
+        if(fitnesses[index] > best_fitness){
+            best_fitness = fitnesses[index];
+            best_index = index;
+        }
+    }
+
+    return population[best_index];
+}
