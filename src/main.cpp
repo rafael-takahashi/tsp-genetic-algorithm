@@ -3,6 +3,7 @@
 
 #include "tsp.h"
 #include "genetic.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -10,11 +11,16 @@ int main() {
      string file_path = "instances/pla85900.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
-     Path constructed_path = generate_random_path(node_list, 41);
+     vector<Path> population = generate_population(node_list, POPULATION_SIZE);
 
-     cout << constructed_path.node_sequence.size() << '\n';
-     cout << fixed << setprecision(15) << constructed_path.distance << '\n';
+     int i = 1;
 
+     for (auto path : population) {
+          cout << "Path " << i << '\n'; 
+          cout << fixed << setprecision(15) << path.distance << '\n';
+          i++;
+     }
+     
      /*
      char repeat;
      do {

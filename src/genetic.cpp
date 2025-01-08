@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Path generate_random_path(std::vector<Node>& node_list, unsigned int seed) {
+Path generate_random_path(vector<Node>& node_list, unsigned int seed) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
@@ -35,18 +35,26 @@ Path generate_random_path(std::vector<Node>& node_list, unsigned int seed) {
     return Path(res_distance, node_sequence);
 }
 
-
-double fitness_evaluation(Path path){
-    return 1/path.distance;
+vector<Path> generate_population(vector<Node>& node_list, int size) {
+    vector<Path> population;
+    
+    for (int i = 0; i < size; i++) 
+        population.push_back(generate_random_path(node_list, i));
+        
+    return population;
 }
 
-std::vector<Node> tournament_selection(const std::vector<std::vector<Node>>& population, const std::vector<double>& fitnesses, int tournament_size = 3){
+double fitness_evaluation(Path path) {
+    return 1.0 / path.distance;
+}
+
+vector<Node> tournament_selection(const vector<vector<Node>>& population, const vector<double>& fitnesses, int tournament_size) {
     int best_index = -1;
     double best_fitness = -1.0;
 
-    for(int i =0; i < tournament_size; i++){
+    for(int i =0; i < tournament_size; i++) {
         int index = rand() % population.size();
-        if(fitnesses[index] > best_fitness){
+        if(fitnesses[index] > best_fitness) {
             best_fitness = fitnesses[index];
             best_index = index;
         }
