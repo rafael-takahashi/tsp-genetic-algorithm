@@ -5,6 +5,11 @@
 
 using namespace std;
 
+
+double calculate_fitness(double distance) {
+    return 1.0 / distance;
+}
+
 Path generate_random_path(vector<Node>& node_list, unsigned int seed) {
     vector<Node> node_sequence;
     double res_distance = 0;
@@ -32,7 +37,7 @@ Path generate_random_path(vector<Node>& node_list, unsigned int seed) {
         current = next;
     }
 
-    return Path(res_distance, node_sequence);
+    return Path(res_distance, node_sequence, calculate_fitness(res_distance));
 }
 
 vector<Path> generate_population(vector<Node>& node_list, int size) {
@@ -42,10 +47,6 @@ vector<Path> generate_population(vector<Node>& node_list, int size) {
         population.push_back(generate_random_path(node_list, i));
         
     return population;
-}
-
-double fitness_evaluation(Path path) {
-    return 1.0 / path.distance;
 }
 
 vector<Node> tournament_selection(const vector<vector<Node>>& population, const vector<double>& fitnesses, int tournament_size) {
@@ -63,6 +64,7 @@ vector<Node> tournament_selection(const vector<vector<Node>>& population, const 
     return population[best_index];
 }
 
+/*
 vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2){
     int size = parent1.size();
 
@@ -104,3 +106,4 @@ vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2)
 
     return child1, child2;
 }
+*/

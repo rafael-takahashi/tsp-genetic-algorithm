@@ -3,19 +3,7 @@
 #include <vector>
 
 #include "node.h"
-
-struct Path {
-    double distance = 0.0;
-    std::vector<Node> node_sequence = {};
-    size_t size = 0;
-
-    Path() = default;
-
-    Path(double distance, std::vector<Node>& sequence)
-        : distance(distance), 
-          node_sequence(sequence), 
-          size(sequence.size()) {}
-};
+#include "path.h"
 
 std::vector<Node> tsp_to_vector(std::string& file_path);
 
