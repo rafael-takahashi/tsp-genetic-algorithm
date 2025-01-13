@@ -1,4 +1,5 @@
 #include "genetic.h"
+#include "parameters.h"
 #include "path.h"
 
 #include <random>
@@ -11,13 +12,13 @@ double calculate_fitness(double distance) {
     return 1.0 / distance;
 }
 
-Path generate_random_path(vector<Node>& node_list, unsigned int seed) {
+Path generate_random_path(vector<Node>& node_list) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
     for (int i = 0; i < node_list.size(); i++)
         unvisited.push_back(i);
-    mt19937 gen(seed);
+    mt19937 gen(SEED);
 
     int random_index = gen() % unvisited.size();
     int current = unvisited[random_index];
@@ -41,11 +42,11 @@ Path generate_random_path(vector<Node>& node_list, unsigned int seed) {
     return Path(res_distance, node_sequence, calculate_fitness(res_distance));
 }
 
-vector<Path> generate_population(vector<Node>& node_list, int size) {
+vector<Path> generate_population(vector<Node>& node_list) {
     vector<Path> population;
     
-    for (int i = 0; i < size; i++) 
-        population.push_back(generate_random_path(node_list, i));
+    for (int i = 0; i < POPULATION_SIZE; i++) 
+        population.push_back(generate_random_path(node_list));
         
     return population;
 }
@@ -71,6 +72,7 @@ vector<Path> tournament_selection(const vector<Path>& population, int tournament
     return parents;
 }
 
+/*
 vector<Path> ox_crossover(const vector<Path>& parents){
     vector<Path> childrens;
 
@@ -152,8 +154,11 @@ vector<Path> ox_crossover(const vector<Path>& parents){
 
     return childrens;
 }
+*/
 
-vector<int> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+vector<Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+    vector<Path> children;
+
     int size = parent1_seq.size();
 
     int cut_point1 = rand() % size;
@@ -169,7 +174,7 @@ vector<int> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
     
     for (int i = 0; i < size; i++) {
         if (i < cut_point1 || i >= cut_point2) {
-            if (find(child1.begin(), child1.end(), parent2_seq[i]) != child1.end()) {
+            if (find(child1.begin(), child1.end(), parent2_seq[i].id) != child1.end()) {
                 int j = i;
                 while (find(child1.begin(), child1.end(), parent2_seq[j]) != child1.end())
                     j = find(parent1_seq.begin(), parent1_seq.end(), parent2_seq[j]) - parent1_seq.begin();
@@ -178,7 +183,7 @@ vector<int> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
                 child1[i] = parent2_seq[i];
             
 
-            if (find(child2.begin(), child2.end(), parent1_seq[i]) != child2.end()) {
+            if (find(child2.begin(), child2.end(), parent1_seq[i].id) != child2.end()) {
                 int j = i;
                 while (find(child2.begin(), child2.end(), parent1_seq[j]) != child2.end())
                     j = find(parent2_seq.begin(), parent2_seq.end(), parent1_seq[j]) - parent2_seq.begin();
@@ -187,4 +192,12 @@ vector<int> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
                 child2[i] = parent1_seq[i];
         }
     }
+
+    Path child1_path = create_path_by_sequence(child1);
+    Path child2_path = create_path_by_sequence(child2);
+
+    children.push_back(child1_path);
+    children.push_back(child2_path);
+
+    return children;
 }

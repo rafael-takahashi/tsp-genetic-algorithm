@@ -12,7 +12,7 @@ int main() {
      string file_path = "instances/pla85900.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
-     vector<Path> population = generate_population(node_list, POPULATION_SIZE);
+     vector<Path> population = generate_population(node_list);
 
      int i = 1;
 
