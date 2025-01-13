@@ -12,13 +12,13 @@ double calculate_fitness(double distance) {
     return 1.0 / distance;
 }
 
-Path generate_random_path(vector<Node>& node_list) {
+Path generate_random_path(vector<Node>& node_list, int seed) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
     for (long unsigned int i = 0; i < node_list.size(); i++)
         unvisited.push_back(i);
-    mt19937 gen(SEED);
+    mt19937 gen(seed);
 
     int random_index = gen() % unvisited.size();
     int current = unvisited[random_index];
@@ -46,33 +46,46 @@ vector<Path> generate_population(vector<Node>& node_list) {
     vector<Path> population;
     
     for (int i = 0; i < POPULATION_SIZE; i++) 
-        population.push_back(generate_random_path(node_list));
+        population.push_back(generate_random_path(node_list, SEED + i));
         
     return population;
 }
 
-vector<Path> tournament_selection(const vector<Path>& population, int tournament_size) {
+vector<Path> tournament_selection(vector<Path>& population, int tournament_size) {
     vector<Path> parents;
 
-    for (int j = 0; j < 2; j++) { 
-        int best_index = -1;
-        double best_fitness = -1.0;
-        
-        for (int i = 0; i < tournament_size; i++) {
-            int index = rand() % population.size();  
-            if (population[index].fitness > best_fitness) {
-                best_fitness = population[index].fitness; 
-                best_index = index;  
-            }
-        }
+    if (tournament_size > population.size()) {
+        throw std::invalid_argument("Tournament size cannot be larger than population size");
+    }
 
+    int best_index = -1;
+    int second_best_index = -1;
+    double best_fitness = -std::numeric_limits<double>::infinity();
+    double second_best_fitness = -std::numeric_limits<double>::infinity();
+
+    for (int i = 0; i < tournament_size; i++) {
+        int index = rand() % population.size();
+        if (population[index].fitness > best_fitness) {
+            second_best_fitness = best_fitness;
+            second_best_index = best_index;
+            best_fitness = population[index].fitness;
+            best_index = index;
+        } else if (population[index].fitness > second_best_fitness) {
+            second_best_fitness = population[index].fitness;
+            second_best_index = index;
+        }
+    }
+
+    if (best_index != -1) {
         parents.push_back(population[best_index]);
+    }
+    if (second_best_index != -1) {
+        parents.push_back(population[second_best_index]);
     }
 
     return parents;
 }
 
-/*
 vector<Path> ox_crossover(const vector<Path>& parents){
     vector<Path> childrens;
 
@@ -122,7 +135,7 @@ vector<Path> ox_crossover(const vector<Path>& parents){
     }
 
     int pointer2 = cut_point1;
-    int i = 0;
+    i = 0;
     while (i < size) {
         bool found = false;
         int node_id = parents[0].node_sequence[i].id;
@@ -154,7 +167,6 @@ vector<Path> ox_crossover(const vector<Path>& parents){
 
     return childrens;
 }
-*/
 
 vector<Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
     vector<Path> children;

@@ -13,7 +13,7 @@ int main() {
      vector<Node> node_list = tsp_to_vector(file_path);
 
      vector<Path> population = generate_population(node_list);
-
+     
      int i = 1;
 
      for (auto path : population) {
@@ -21,6 +21,14 @@ int main() {
           cout << fixed << setprecision(15) << path.distance << '\n';
           cout << fixed << setprecision(15) << path.fitness << '\n';
           i++;
+     }
+
+     vector<Path> parents = tournament_selection(population, 5);
+
+     cout << "Choosen Parents:\n";
+     for (auto path : parents) {
+          cout << fixed << setprecision(15) << path.distance << '\n';
+          cout << fixed << setprecision(15) << path.fitness << '\n';
      }
 
      /*
