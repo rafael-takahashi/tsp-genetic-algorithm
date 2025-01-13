@@ -8,6 +8,7 @@
 Path generate_random_path(std::vector<Node>& node_list, unsigned int seed);
 std::vector<Path> generate_population(std::vector<Node>& node_list, int size);
 
+double calculate_fitness(double distance);
 double fitness_evaluation(Path path);
 std::vector<Path> tournament_selection(const std::vector<Path>& population, const std::vector<double>& fitnesses, int tournament_size = 3);
-//vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2);
+vector<Path> ox_crossover(const vector<Path>& parents);

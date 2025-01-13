@@ -1,4 +1,5 @@
 #include "genetic.h"
+#include "path.h"
 
 #include <random>
 #include <algorithm>
@@ -50,62 +51,104 @@ vector<Path> generate_population(vector<Node>& node_list, int size) {
 }
 
 vector<Path> tournament_selection(const vector<Path>& population, int tournament_size) {
-    int best_index = -1;
-    double best_fitness = -1.0;
     vector<Path> parents;
 
-    for(int j = 0; j < 2; j++){
-        for(int i = 0; i < tournament_size; i++) {
-            int index = rand() % population.size();
-            if(population[index].fitness > best_fitness) {
-                best_fitness = population[index].fitness;
-                best_index = index;
+    for (int j = 0; j < 2; j++) { 
+        int best_index = -1;
+        double best_fitness = -1.0;
+        
+        for (int i = 0; i < tournament_size; i++) {
+            int index = rand() % population.size();  
+            if (population[index].fitness > best_fitness) {
+                best_fitness = population[index].fitness; 
+                best_index = index;  
             }
-            parents.push_back(population[index]);
         }
+
+        parents.push_back(population[best_index]);
     }
+
     return parents;
 }
 
-/*
-vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2){
-    int size = parent1.size();
+vector<Path> ox_crossover(const vector<Path>& parents){
+    vector<Path> childrens;
+
+    int size = parents[0].size;
 
     int cut_point1 = rand() % (size/2);
     int cut_point2 = cut_point1 + (rand() % (size/2));
 
+    if (cut_point1 > cut_point2) {
+        swap(cut_point1, cut_point2);
+    }
+
     cout << "Cut point 1: " << cut_point1 << endl;
     cout << "Cut point 2: " << cut_point2 << endl;
 
-    vector<int> child1(size, -1);
-    vector<int> child2(size, -1);
+    vector<Node> child1_sequence;
+    vector<Node> child2_sequence;
 
     for(int i = cut_point1; i < cut_point2; i++){
-        child1[i] = parent1[i];
-        child2[i] = parent2[i];
+        child1_sequence[i] = parents[0].node_sequence[i];
+        child2_sequence[i] = parents[1].node_sequence[i];
     }
 
     int pointer1 = cut_point2;
-    for(int i = 0; i < size; i++){
-        if((find(child1.begin(), child1.end(), parent2[i]) == child1.end())){
-            if(pointer1 >= size){
+    int i = 0;
+    while (i < size) {
+        bool found = false;
+        int node_id = parents[1].node_sequence[i].id;
+
+        int j = 0;
+        while (j < size && !found) {
+            if (child1_sequence[j].id == node_id) {
+                found = true;
+            }
+            j++;
+        }
+
+        if (!found) {
+            if (pointer1 >= size) {
                 pointer1 = 0;
             }
-            child1[pointer1] = parent2[i];
+            child1_sequence[pointer1] = parents[1].node_sequence[i];
             pointer1++;
         }
+
+        i++;
     }
 
-    int pointer2 = cut_point2;
-    for(int i = 0; i < size; i++){
-        if((find(child2.begin(), child2.end(), parent1[i]) == child2.end())){
-            if(pointer2 >= size){
+    int pointer2 = cut_point1;
+    int i = 0;
+    while (i < size) {
+        bool found = false;
+        int node_id = parents[0].node_sequence[i].id;
+
+        int j = 0;
+        while (j < size && !found) {
+            if (child2_sequence[j].id == node_id) {
+                found = true;
+            }
+            j++;
+        }
+
+        if (!found) {
+            if (pointer2 >= size) {
                 pointer2 = 0;
             }
-            child2[pointer1] = parent1[i];
+            child2_sequence[pointer2] = parents[0].node_sequence[i];
             pointer2++;
         }
+
+        i++;
     }
 
-    return child1, child2;
-}*/
+    Path child1 = create_path_by_sequence(child1_sequence);
+    Path child2 = create_path_by_sequence(child2_sequence);
+
+    childrens.push_back(child1);
+    childrens.push_back(child2);
+
+    return childrens;
+}
