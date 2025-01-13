@@ -49,27 +49,30 @@ vector<Path> generate_population(vector<Node>& node_list, int size) {
     return population;
 }
 
-vector<Node> tournament_selection(const vector<vector<Node>>& population, const vector<double>& fitnesses, int tournament_size) {
+vector<Path> tournament_selection(const vector<Path>& population, int tournament_size) {
     int best_index = -1;
     double best_fitness = -1.0;
+    vector<Path> parents;
 
-    for(int i =0; i < tournament_size; i++) {
-        int index = rand() % population.size();
-        if(fitnesses[index] > best_fitness) {
-            best_fitness = fitnesses[index];
-            best_index = index;
+    for(int j = 0; j < 2; j++){
+        for(int i = 0; i < tournament_size; i++) {
+            int index = rand() % population.size();
+            if(population[index].fitness > best_fitness) {
+                best_fitness = population[index].fitness;
+                best_index = index;
+            }
+            parents.push_back(population[index]);
         }
     }
-
-    return population[best_index];
+    return parents;
 }
 
 /*
 vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2){
     int size = parent1.size();
 
-    int cut_point1 = rand() % size;
-    int cut_point2 = rand() % (size - cut_point1);
+    int cut_point1 = rand() % (size/2);
+    int cut_point2 = cut_point1 + (rand() % (size/2));
 
     cout << "Cut point 1: " << cut_point1 << endl;
     cout << "Cut point 2: " << cut_point2 << endl;
@@ -105,5 +108,4 @@ vector<int> ox_crossover(const vector<int>& parent1, const vector<int>& parent2)
     }
 
     return child1, child2;
-}
-*/
+}*/

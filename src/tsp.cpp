@@ -74,7 +74,7 @@ Path nearest_neighbor(vector<Node>& node_list) {
         current = next;
     }
 
-    return Path(res_distance, node_sequence);
+    return Path(res_distance, node_sequence, 0);
 }
 
 Path farthest_insertion(vector<Node>& node_list) {
@@ -136,7 +136,7 @@ Path farthest_insertion(vector<Node>& node_list) {
         if (pq.empty()) break;
     }
 
-    return Path(res_distance, node_sequence);
+    return Path(res_distance, node_sequence, 0);
 }
 
 void two_opt_swap(vector<Node>& sequence, unsigned int first, unsigned int second) {
@@ -171,7 +171,7 @@ Path two_opt(Path& path) {
         }
     } while (has_improved);
 
-    return Path(current_distance, current_sequence);
+    return Path(current_distance, current_sequence, 0);
 }
 
 double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, size_t path_size) {
@@ -229,5 +229,5 @@ Path pair_swap(Path& path) {
         }
     } while (has_improved);
     
-    return Path(current_distance, current_sequence);
+    return Path(current_distance, current_sequence, 0);
 }
