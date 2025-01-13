@@ -16,7 +16,7 @@ Path generate_random_path(vector<Node>& node_list) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
-    for (int i = 0; i < node_list.size(); i++)
+    for (long unsigned int i = 0; i < node_list.size(); i++)
         unvisited.push_back(i);
     mt19937 gen(SEED);
 

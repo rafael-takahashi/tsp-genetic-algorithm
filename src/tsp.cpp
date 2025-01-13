@@ -105,7 +105,7 @@ Path farthest_insertion(vector<Node>& node_list) {
 
     priority_queue<int, vector<int>, decltype(compare)> pq(compare);
 
-    for (int i = 0; i < node_list.size(); i++)
+    for (long unsigned int i = 0; i < node_list.size(); i++)
         if (!visited[i]) pq.push(i);
 
     while (node_sequence.size() < node_list.size()) {
@@ -174,7 +174,7 @@ Path two_opt(Path& path) {
     return Path(current_distance, current_sequence, 0);
 }
 
-double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, size_t path_size) {
+double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, int path_size) {
     int prev_i = (i - 1 + path_size) % path_size;
     int next_i = (i + 1) % path_size;
     int prev_j = (j - 1 + path_size) % path_size;
