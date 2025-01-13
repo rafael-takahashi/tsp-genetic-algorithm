@@ -11,6 +11,10 @@ struct Node {
 
     Node(int id, double x, double y) : id(id), x(x), y(y) {}
 
+    bool operator==(const Node& other) const {
+        return id == other.id;
+    }
+
     bool operator==(int node_id) const {
         return id == node_id;
     }
