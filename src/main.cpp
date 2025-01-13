@@ -19,7 +19,7 @@ int main() {
      for (auto path : population) {
           cout << "Path " << i << '\n'; 
           cout << fixed << setprecision(15) << path.distance << '\n';
-          cout << fixed << setprecision(15) << path.fitness.value_or(0.0) << '\n';
+          cout << fixed << setprecision(15) << path.fitness << '\n';
           i++;
      }
 

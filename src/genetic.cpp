@@ -152,3 +152,39 @@ vector<Path> ox_crossover(const vector<Path>& parents){
 
     return childrens;
 }
+
+vector<int> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+    int size = parent1_seq.size();
+
+    int cut_point1 = rand() % size;
+    int cut_point2 = rand() % (size - cut_point1);
+
+    vector<Node> child1(size);
+    vector<Node> child2(size);
+
+    for (int i = cut_point1; i < cut_point2; i++) {
+        child1[i] = parent1_seq[i];
+        child2[i] = parent2_seq[i]; 
+    }
+    
+    for (int i = 0; i < size; i++) {
+        if (i < cut_point1 || i >= cut_point2) {
+            if (find(child1.begin(), child1.end(), parent2_seq[i]) != child1.end()) {
+                int j = i;
+                while (find(child1.begin(), child1.end(), parent2_seq[j]) != child1.end())
+                    j = find(parent1_seq.begin(), parent1_seq.end(), parent2_seq[j]) - parent1_seq.begin();
+                child1[i] = parent2_seq[j];
+            } else 
+                child1[i] = parent2_seq[i];
+            
+
+            if (find(child2.begin(), child2.end(), parent1_seq[i]) != child2.end()) {
+                int j = i;
+                while (find(child2.begin(), child2.end(), parent1_seq[j]) != child2.end())
+                    j = find(parent2_seq.begin(), parent2_seq.end(), parent1_seq[j]) - parent2_seq.begin();
+                child2[i] = parent1_seq[j];
+            } else 
+                child2[i] = parent1_seq[i];
+        }
+    }
+}
