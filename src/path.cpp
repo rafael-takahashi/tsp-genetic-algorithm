@@ -1,3 +1,4 @@
+#include "path.h"
 #include "genetic.h"
 
 Path create_path_by_sequence(std::vector<Node>& sequence){
