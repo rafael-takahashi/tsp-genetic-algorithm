@@ -8,39 +8,57 @@
 using namespace std;
 
 int main() {
-
-     string file_path = "instances/a280.tsp";
+     string file_path = "instances/u574.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      vector<Path> population = generate_population(node_list);
-     
-     int i = 1;
 
-     for (auto path : population) {
-          cout << "Path " << i << '\n'; 
-          cout << fixed << setprecision(15) << path.distance << '\n';
-          cout << fixed << setprecision(15) << path.fitness << '\n';
-          i++;
+     cout << "Initial population generated:\n";
+
+     double average = 0.0;
+
+     for (auto path : population) 
+          average += path.distance;
+
+     average /= POPULATION_SIZE;
+
+     cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
+
+     vector<Path> offspring;
+     vector<Path> new_population;
+     int iterations = 0;
+     bool significant_improvement = true;
+     while (significant_improvement && iterations < 200) {
+          for (int i = 0; i < POPULATION_SIZE - ELITISM_SIZE; i+=2) {     
+               auto [parent1, parent2] = tournament_selection(population, TOURNAMENT_SIZE, SEED);
+
+               auto [offspring1, offspring2] = i % 2 ?
+                              ox_crossover(parent1.node_sequence, parent2.node_sequence) :
+                              pmx_crossover(parent1.node_sequence, parent2.node_sequence);
+
+               offspring.push_back(offspring1);
+               offspring.push_back(offspring2);
+          }
+
+          new_population = elitism(population, offspring);
+          population = new_population;
+               
+          double new_average = 0.0;
+
+          for (auto path : new_population) 
+               new_average += path.distance;
+
+          new_average /= POPULATION_SIZE;
+
+          if (new_average < average)
+               average = new_average;
+          else 
+               significant_improvement = false;
+
+          cout << fixed << setprecision(15) << iterations + 1 << "º Generation average distance: " << new_average << "\n";
+
+          iterations++;
      }
-
-     auto [parent1, parent2] = tournament_selection(population, TOURNAMENT_SIZE, SEED);
-
-     cout << "Parents:\n";
-     cout << fixed << setprecision(15) << parent1.distance << '\n';
-     cout << fixed << setprecision(15) << parent1.fitness << '\n';
-     
-     cout << fixed << setprecision(15) << parent2.distance << '\n';
-     cout << fixed << setprecision(15) << parent2.fitness << '\n';
-
-
-     auto [offspring1, offspring2] = ox_crossover(parent1.node_sequence, parent2.node_sequence);
-
-     cout << "Children:\n";
-     cout << fixed << setprecision(15) << offspring1.distance << '\n';
-     cout << fixed << setprecision(15) << offspring1.fitness << '\n';
-     
-     cout << fixed << setprecision(15) << offspring2.distance << '\n';
-     cout << fixed << setprecision(15) << offspring2.fitness << '\n';
 
      /*
      char repeat;

@@ -85,9 +85,6 @@ pair<Path, Path> ox_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_s
     if (cut_point1 > cut_point2) 
         swap(cut_point1, cut_point2);
 
-    cout << "Cut point 1: " << cut_point1 << endl;
-    cout << "Cut point 2: " << cut_point2 << endl;
-
     vector<Node> offspring1_seq(size);
     vector<Node> offspring2_seq(size);
 
@@ -197,7 +194,7 @@ pair<Path, Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_
 
 void mutation(vector<Path>& population, float mutation_rate){
     int idx_mutaded_individual = -1;
-    int idx_first_position = - 1;
+    int idx_first_position = -1;
     int idx_second_position = -1;
 
     int mutaded_individuals = ceil(POPULATION_SIZE * mutation_rate);
@@ -210,4 +207,19 @@ void mutation(vector<Path>& population, float mutation_rate){
 
         swap(population[idx_mutaded_individual].node_sequence[idx_first_position], population[idx_mutaded_individual].node_sequence[idx_second_position]);
     }
+}
+
+vector<Path> elitism(vector<Path>& population, vector<Path>& offspring) {
+    vector<Path> new_population;
+    vector<Path> combined = population;
+    combined.insert(combined.end(), offspring.begin(), offspring.end());
+
+    sort(combined.begin(), combined.end(), [](const Path& a, const Path& b) {
+        return a.fitness > b.fitness;
+    });
+
+    for (int i = 0; i < POPULATION_SIZE; i++)
+        new_population.push_back(combined[i]);
+
+    return new_population;
 }
