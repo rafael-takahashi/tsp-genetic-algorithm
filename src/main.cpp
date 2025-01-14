@@ -23,7 +23,7 @@ int main() {
      int generation = 0;
 
      while (generation != MAX_GENERATIONS) {
-          auto [parent1, parent2] = tournament_selection(population, TOURNAMENT_SIZE, SEED);
+          auto [parent1, parent2] = tournament_selection(population, SEED);
           auto [offspring1, offspring2] = pmx_crossover(parent1.node_sequence, parent2.node_sequence);
 
           auto [worst_idx, second_worst_idx] = find_two_worst_indexes(population);

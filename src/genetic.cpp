@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Path generate_random_path(vector<Node>& node_list, int seed) {
+Path generate_random_path(const vector<Node>& node_list, int seed) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
@@ -37,7 +37,7 @@ Path generate_random_path(vector<Node>& node_list, int seed) {
     return Path(res_distance, node_sequence, calculate_fitness(res_distance));
 }
 
-vector<Path> generate_population(vector<Node>& node_list) {
+vector<Path> generate_population(const vector<Node>& node_list) {
     vector<Path> population;
     
     for (int i = 0; i < POPULATION_SIZE; i++) 
@@ -46,10 +46,10 @@ vector<Path> generate_population(vector<Node>& node_list) {
     return population;
 }
 
-pair<Path, Path> tournament_selection(vector<Path>& population, long unsigned int tournament_size, int seed) {
+pair<Path, Path> tournament_selection(vector<Path>& population, int seed) {
     mt19937 gen(seed);
 
-    if (tournament_size > population.size())
+    if (TOURNAMENT_SIZE > int(population.size()))
         throw invalid_argument("Tournament size cannot be larger than population size");
 
     int parent1_idx = -1;
@@ -57,8 +57,8 @@ pair<Path, Path> tournament_selection(vector<Path>& population, long unsigned in
     double parent1_fit = -numeric_limits<double>::infinity();
     double parent2_fit = -numeric_limits<double>::infinity();
     
-    for (long unsigned int i = 0; i < tournament_size; i++) {
-        int index = (gen() + i) % population.size();
+    for (int i = 0; i < TOURNAMENT_SIZE; i++) {
+        int index = (gen() + i) % int(population.size());
         if (population[index].fitness > parent1_fit) {
             parent2_fit = parent1_fit;
             parent2_idx = parent1_idx;
