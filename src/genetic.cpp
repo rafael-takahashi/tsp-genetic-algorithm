@@ -2,8 +2,8 @@
 #include "parameters.h"
 #include "path.h"
 
-#include <random>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -209,17 +209,23 @@ void mutation(vector<Path>& population, float mutation_rate){
     }
 }
 
-vector<Path> elitism(vector<Path>& population, vector<Path>& offspring) {
-    vector<Path> new_population;
-    vector<Path> combined = population;
-    combined.insert(combined.end(), offspring.begin(), offspring.end());
+pair<int, int> find_two_worst_indexes(vector<Path>& population) {
+    int worst_idx = -1;
+    int second_worst_idx = -1;
+    double worst_fitness = numeric_limits<double>::infinity();
+    double second_worst_fitness = numeric_limits<double>::infinity();
 
-    sort(combined.begin(), combined.end(), [](const Path& a, const Path& b) {
-        return a.fitness > b.fitness;
-    });
+    for (long unsigned int i = 0; i < population.size(); i++) {
+        if (population[i].fitness < worst_fitness) {
+            second_worst_fitness = worst_fitness;
+            second_worst_idx = worst_idx;
+            worst_fitness = population[i].fitness;
+            worst_idx = i;
+        } else if (population[i].fitness < second_worst_fitness) {
+            second_worst_fitness = population[i].fitness;
+            second_worst_idx = i;
+        }
+    }
 
-    for (int i = 0; i < POPULATION_SIZE; i++)
-        new_population.push_back(combined[i]);
-
-    return new_population;
+    return make_pair(worst_idx, second_worst_idx);
 }

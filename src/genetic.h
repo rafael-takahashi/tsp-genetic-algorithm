@@ -15,4 +15,4 @@ std::pair<Path, Path> pmx_crossover(std::vector<Node>& parent1_seq, std::vector<
 
 void mutation(std::vector<Path>& population, float mutation_rate);
 
-std::vector<Path> elitism(std::vector<Path>& population, std::vector<Path>& offspring);
+std::pair<int, int> find_two_worst_indexes(std::vector<Path>& population);

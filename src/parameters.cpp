@@ -5,3 +5,4 @@ const int POPULATION_SIZE = 50;
 const int TOURNAMENT_SIZE = 5;
 const float MUTATION_RATE = 0.05;
 const int ELITISM_SIZE = 5;
+const int MAX_GENERATIONS = 50;
