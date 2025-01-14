@@ -51,42 +51,40 @@ vector<Path> generate_population(vector<Node>& node_list) {
     return population;
 }
 
-vector<Path> tournament_selection(vector<Path>& population, long unsigned int tournament_size, int seed) {
-    vector<Path> parents;
+pair<Path, Path> tournament_selection(vector<Path>& population, long unsigned int tournament_size, int seed) {
     mt19937 gen(seed);
 
-    if (tournament_size > population.size()) {
-        throw std::invalid_argument("Tournament size cannot be larger than population size");
-    }
+    if (tournament_size > population.size())
+        throw invalid_argument("Tournament size cannot be larger than population size");
 
-    int best_index = -1;
-    int second_best_index = -1;
-    double best_fitness = -std::numeric_limits<double>::infinity();
-    double second_best_fitness = -std::numeric_limits<double>::infinity();
+    int parent1_idx = -1;
+    int parent2_idx = -1;
+    double parent1_fit = -numeric_limits<double>::infinity();
+    double parent2_fit = -numeric_limits<double>::infinity();
     
     for (long unsigned int i = 0; i < tournament_size; i++) {
-        int index = gen() % population.size();
-        if (population[index].fitness > best_fitness) {
-            second_best_fitness = best_fitness;
-            second_best_index = best_index;
-            best_fitness = population[index].fitness;
-            best_index = index;
-        } else if (population[index].fitness > second_best_fitness) {
-            second_best_fitness = population[index].fitness;
-            second_best_index = index;
+        int index = (gen() + i) % population.size();
+        if (population[index].fitness > parent1_fit) {
+            parent2_fit = parent1_fit;
+            parent2_idx = parent1_idx;
+            parent1_fit = population[index].fitness;
+            parent1_idx = index;
+        } else if (population[index].fitness > parent2_fit) {
+            parent2_fit = population[index].fitness;
+            parent2_idx = index;
         }
     }
 
-    if (best_index != -1) {
-        parents.push_back(population[best_index]);
-    }
-    if (second_best_index != -1) {
-        parents.push_back(population[second_best_index]);
-    }
+    cout << parent1_idx << '\n';
+    cout << parent2_idx << '\n';
 
-    return parents;
+    if (parent1_idx != -1 && parent2_idx != -1)
+        return make_pair(population[parent1_idx], population[parent2_idx]);
+    else
+        throw runtime_error("Unable to select two parents");
 }
 
+//TODO: utilize make_pair to optimally return two chromosomes
 vector<Path> ox_crossover(const vector<Path>& parents){
     vector<Path> childrens;
 
@@ -169,7 +167,10 @@ vector<Path> ox_crossover(const vector<Path>& parents){
     return childrens;
 }
 
-vector<Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+//TODO: utilize make_pair to optimally return two chromosomes
+vector<Path> pmx_crossover(
+    vector<Node>& parent1_seq, vector<Node>& parent2_seq
+) {
     vector<Path> children;
 
     int size = parent1_seq.size();
@@ -187,8 +188,13 @@ vector<Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq)
     
     for (int i = 0; i < size; i++) {
         if (i < cut_point1 || i >= cut_point2) {
+            /*
+                If child 1|2 already has the node, find the node that maps to this position in parent 2|1
+                Else just copy the node from parent 2|1
+            */
             if (find(child1.begin(), child1.end(), parent2_seq[i].id) != child1.end()) {
                 int j = i;
+                // Find the node that maps to this position in parent 2
                 while (find(child1.begin(), child1.end(), parent2_seq[j]) != child1.end())
                     j = find(parent1_seq.begin(), parent1_seq.end(), parent2_seq[j]) - parent1_seq.begin();
                 child1[i] = parent2_seq[j];

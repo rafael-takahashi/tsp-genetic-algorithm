@@ -23,10 +23,20 @@ int main() {
           i++;
      }
 
-     vector<Path> parents = tournament_selection(population, TOURNAMENT_SIZE, SEED);
+     auto [parent1, parent2] = tournament_selection(population, TOURNAMENT_SIZE, SEED);
 
-     cout << "Choosen Parents:\n";
-     for (auto path : parents) {
+     cout << "Parents:\n";
+     cout << fixed << setprecision(15) << parent1.distance << '\n';
+     cout << fixed << setprecision(15) << parent1.fitness << '\n';
+     
+     cout << fixed << setprecision(15) << parent2.distance << '\n';
+     cout << fixed << setprecision(15) << parent2.fitness << '\n';
+
+
+     vector<Path> children = pmx_crossover(parent1.node_sequence, parent2.node_sequence);
+
+     cout << "Children:\n";
+     for (auto path: children) {
           cout << fixed << setprecision(15) << path.distance << '\n';
           cout << fixed << setprecision(15) << path.fitness << '\n';
      }
