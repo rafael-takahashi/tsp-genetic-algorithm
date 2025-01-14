@@ -12,3 +12,5 @@ std::pair<Path, Path> tournament_selection(std::vector<Path>& population, long u
 
 std::pair<Path, Path> ox_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
 std::pair<Path, Path> pmx_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
+
+void mutation(vector<Path>& population, float mutation_rate);

@@ -194,3 +194,20 @@ pair<Path, Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_
 
     return make_pair(offspring1, offspring2);
 }
+
+void mutation(vector<Path>& population, float mutation_rate){
+    int idx_mutaded_individual = -1;
+    int idx_first_position = - 1;
+    int idx_second_position = -1;
+
+    int mutaded_individuals = ceil(POPULATION_SIZE * mutation_rate);
+
+    for(int i = 0; i < mutaded_individuals; i++){
+        idx_mutaded_individual = rand() % POPULATION_SIZE;
+
+        idx_first_position = rand() % population[idx_mutaded_individual].node_sequence.size();
+        idx_second_position = rand() % population[idx_mutaded_individual].node_sequence.size();
+
+        swap(population[idx_mutaded_individual].node_sequence[idx_first_position], population[idx_mutaded_individual].node_sequence[idx_second_position]);
+    }
+}
