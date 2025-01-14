@@ -19,4 +19,5 @@ struct Path {
           fitness(fitness) {}
 };
 
+double calculate_fitness(double distance);
 Path create_path_by_sequence(std::vector<Node>& sequence);

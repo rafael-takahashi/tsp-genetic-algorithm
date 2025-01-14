@@ -1,5 +1,8 @@
 #include "path.h"
-#include "genetic.h"
+
+double calculate_fitness(double distance) {
+    return 1.0 / distance;
+}
 
 Path create_path_by_sequence(std::vector<Node>& sequence){
     int size = sequence.size();

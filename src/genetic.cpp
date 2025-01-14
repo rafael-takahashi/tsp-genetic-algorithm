@@ -7,11 +7,6 @@
 
 using namespace std;
 
-
-double calculate_fitness(double distance) {
-    return 1.0 / distance;
-}
-
 Path generate_random_path(vector<Node>& node_list, int seed) {
     vector<Node> node_sequence;
     double res_distance = 0;
