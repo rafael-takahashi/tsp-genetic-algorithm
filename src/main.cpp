@@ -33,13 +33,14 @@ int main() {
      cout << fixed << setprecision(15) << parent2.fitness << '\n';
 
 
-     vector<Path> children = pmx_crossover(parent1.node_sequence, parent2.node_sequence);
+     auto [offspring1, offspring2] = ox_crossover(parent1.node_sequence, parent2.node_sequence);
 
      cout << "Children:\n";
-     for (auto path: children) {
-          cout << fixed << setprecision(15) << path.distance << '\n';
-          cout << fixed << setprecision(15) << path.fitness << '\n';
-     }
+     cout << fixed << setprecision(15) << offspring1.distance << '\n';
+     cout << fixed << setprecision(15) << offspring1.fitness << '\n';
+     
+     cout << fixed << setprecision(15) << offspring2.distance << '\n';
+     cout << fixed << setprecision(15) << offspring2.fitness << '\n';
 
      /*
      char repeat;

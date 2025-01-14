@@ -70,61 +70,52 @@ pair<Path, Path> tournament_selection(vector<Path>& population, long unsigned in
         }
     }
 
-    cout << parent1_idx << '\n';
-    cout << parent2_idx << '\n';
-
     if (parent1_idx != -1 && parent2_idx != -1)
         return make_pair(population[parent1_idx], population[parent2_idx]);
     else
         throw runtime_error("Unable to select two parents");
 }
 
-//TODO: utilize make_pair to optimally return two chromosomes
-vector<Path> ox_crossover(const vector<Path>& parents){
-    vector<Path> childrens;
-
-    int size = parents[0].size;
+pair<Path, Path> ox_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+    int size = parent1_seq.size();
 
     int cut_point1 = rand() % (size/2);
     int cut_point2 = cut_point1 + (rand() % (size/2));
 
-    if (cut_point1 > cut_point2) {
+    if (cut_point1 > cut_point2) 
         swap(cut_point1, cut_point2);
-    }
 
     cout << "Cut point 1: " << cut_point1 << endl;
     cout << "Cut point 2: " << cut_point2 << endl;
 
-    vector<Node> child1_sequence;
-    vector<Node> child2_sequence;
+    vector<Node> offspring1_seq(size);
+    vector<Node> offspring2_seq(size);
 
-    for(int i = cut_point1; i < cut_point2; i++){
-        child1_sequence[i] = parents[0].node_sequence[i];
-        child2_sequence[i] = parents[1].node_sequence[i];
+    for (int i = cut_point1; i < cut_point2; i++) {
+        offspring1_seq[i] = parent1_seq[i];
+        offspring2_seq[i] = parent2_seq[i];
     }
 
     int pointer1 = cut_point2;
     int i = 0;
+
     while (i < size) {
         bool found = false;
-        int node_id = parents[1].node_sequence[i].id;
+        int node_id = parent2_seq[i].id;
 
         int j = 0;
         while (j < size && !found) {
-            if (child1_sequence[j].id == node_id) {
+            if (offspring1_seq[j].id == node_id)
                 found = true;
-            }
             j++;
         }
 
         if (!found) {
-            if (pointer1 >= size) {
+            if (pointer1 >= size)
                 pointer1 = 0;
-            }
-            child1_sequence[pointer1] = parents[1].node_sequence[i];
+            offspring1_seq[pointer1] = parent2_seq[i];
             pointer1++;
         }
-
         i++;
     }
 
@@ -132,53 +123,42 @@ vector<Path> ox_crossover(const vector<Path>& parents){
     i = 0;
     while (i < size) {
         bool found = false;
-        int node_id = parents[0].node_sequence[i].id;
+        int node_id = parent1_seq[i].id;
 
         int j = 0;
         while (j < size && !found) {
-            if (child2_sequence[j].id == node_id) {
+            if (offspring2_seq[j].id == node_id)
                 found = true;
-            }
             j++;
         }
 
         if (!found) {
-            if (pointer2 >= size) {
+            if (pointer2 >= size)
                 pointer2 = 0;
-            }
-            child2_sequence[pointer2] = parents[0].node_sequence[i];
+            offspring2_seq[pointer2] = parent1_seq[i];
             pointer2++;
         }
-
         i++;
     }
 
-    Path child1 = create_path_by_sequence(child1_sequence);
-    Path child2 = create_path_by_sequence(child2_sequence);
+    Path offspring1 = create_path_by_sequence(offspring1_seq);
+    Path offspring2 = create_path_by_sequence(offspring2_seq);
 
-    childrens.push_back(child1);
-    childrens.push_back(child2);
-
-    return childrens;
+    return make_pair(offspring1, offspring2);
 }
 
-//TODO: utilize make_pair to optimally return two chromosomes
-vector<Path> pmx_crossover(
-    vector<Node>& parent1_seq, vector<Node>& parent2_seq
-) {
-    vector<Path> children;
-
+pair<Path, Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq) {
     int size = parent1_seq.size();
 
     int cut_point1 = rand() % size;
     int cut_point2 = rand() % (size - cut_point1);
 
-    vector<Node> child1(size);
-    vector<Node> child2(size);
+    vector<Node> offspring1_seq(size);
+    vector<Node> offspring2_seq(size);
 
     for (int i = cut_point1; i < cut_point2; i++) {
-        child1[i] = parent1_seq[i];
-        child2[i] = parent2_seq[i]; 
+        offspring1_seq[i] = parent1_seq[i];
+        offspring2_seq[i] = parent2_seq[i]; 
     }
     
     for (int i = 0; i < size; i++) {
@@ -187,31 +167,30 @@ vector<Path> pmx_crossover(
                 If child 1|2 already has the node, find the node that maps to this position in parent 2|1
                 Else just copy the node from parent 2|1
             */
-            if (find(child1.begin(), child1.end(), parent2_seq[i].id) != child1.end()) {
+            if (find(offspring1_seq.begin(), offspring1_seq.end(), parent2_seq[i].id) != offspring1_seq.end()) {
                 int j = i;
                 // Find the node that maps to this position in parent 2
-                while (find(child1.begin(), child1.end(), parent2_seq[j]) != child1.end())
+                while (find(offspring1_seq.begin(), offspring1_seq.end(), parent2_seq[j]) != offspring1_seq.end())
                     j = find(parent1_seq.begin(), parent1_seq.end(), parent2_seq[j]) - parent1_seq.begin();
-                child1[i] = parent2_seq[j];
-            } else 
-                child1[i] = parent2_seq[i];
+                
+                offspring1_seq[i] = parent2_seq[j];
+            } 
+            else offspring1_seq[i] = parent2_seq[i];
             
-
-            if (find(child2.begin(), child2.end(), parent1_seq[i].id) != child2.end()) {
+            if (find(offspring2_seq.begin(), offspring2_seq.end(), parent1_seq[i].id) != offspring2_seq.end()) {
                 int j = i;
-                while (find(child2.begin(), child2.end(), parent1_seq[j]) != child2.end())
+
+                while (find(offspring2_seq.begin(), offspring2_seq.end(), parent1_seq[j]) != offspring2_seq.end())
                     j = find(parent2_seq.begin(), parent2_seq.end(), parent1_seq[j]) - parent2_seq.begin();
-                child2[i] = parent1_seq[j];
-            } else 
-                child2[i] = parent1_seq[i];
+                
+                offspring2_seq[i] = parent1_seq[j];
+            }
+            else offspring2_seq[i] = parent1_seq[i];
         }
     }
 
-    Path child1_path = create_path_by_sequence(child1);
-    Path child2_path = create_path_by_sequence(child2);
+    Path offspring1 = create_path_by_sequence(offspring1_seq);
+    Path offspring2 = create_path_by_sequence(offspring2_seq);
 
-    children.push_back(child1_path);
-    children.push_back(child2_path);
-
-    return children;
+    return make_pair(offspring1, offspring2);
 }
