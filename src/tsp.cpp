@@ -174,7 +174,7 @@ Path two_opt(Path& path) {
     return Path(current_distance, current_sequence, 0);
 }
 
-double calculate_pair_swap_delta(int i, int j, vector<Node>& node_sequence, int path_size) {
+double calculate_swap_delta(int i, int j, vector<Node>& node_sequence, int path_size) {
     int prev_i = (i - 1 + path_size) % path_size;
     int next_i = (i + 1) % path_size;
     int prev_j = (j - 1 + path_size) % path_size;
@@ -218,7 +218,7 @@ Path pair_swap(Path& path) {
         has_improved = false;
         for (size_t i = 0; i < path.size - 1; i++) {
             for (size_t j = i + 1; j < path.size; j++) {
-                double delta = calculate_pair_swap_delta(i, j, current_sequence, path.size);
+                double delta = calculate_swap_delta(i, j, current_sequence, path.size);
 
                 if (delta < -1e-10) {
                     swap(current_sequence[i], current_sequence[j]);

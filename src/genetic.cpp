@@ -1,6 +1,8 @@
 #include "genetic.h"
+
 #include "parameters.h"
 #include "path.h"
+#include "tsp.h"
 
 #include <algorithm>
 #include <random>
@@ -192,21 +194,20 @@ pair<Path, Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_
     return make_pair(offspring1, offspring2);
 }
 
-void mutation(vector<Path>& population, float mutation_rate){
-    int idx_mutaded_individual = -1;
-    int idx_first_position = -1;
-    int idx_second_position = -1;
+void swap_mutation(Path& path) {
+    int size = path.size;
 
-    int mutaded_individuals = ceil(POPULATION_SIZE * mutation_rate);
+    int i = rand() % size;
+    int j = rand() % size;
 
-    for(int i = 0; i < mutaded_individuals; i++){
-        idx_mutaded_individual = rand() % POPULATION_SIZE;
+    while (i == j) 
+            j = rand() % size;
+    
 
-        idx_first_position = rand() % population[idx_mutaded_individual].node_sequence.size();
-        idx_second_position = rand() % population[idx_mutaded_individual].node_sequence.size();
+    swap(path.node_sequence[i], path.node_sequence[j]);
 
-        swap(population[idx_mutaded_individual].node_sequence[idx_first_position], population[idx_mutaded_individual].node_sequence[idx_second_position]);
-    }
+    path.distance += calculate_swap_delta(i, j, path.node_sequence, size);
+    path.fitness = calculate_fitness(path.distance);
 }
 
 pair<int, int> find_two_worst_indexes(vector<Path>& population) {

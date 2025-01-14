@@ -13,6 +13,6 @@ std::pair<Path, Path> tournament_selection(std::vector<Path>& population, int se
 std::pair<Path, Path> ox_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
 std::pair<Path, Path> pmx_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
 
-void mutation(std::vector<Path>& population, float mutation_rate);
+void swap_mutation(Path& path);
 
 std::pair<int, int> find_two_worst_indexes(std::vector<Path>& population);
