@@ -51,8 +51,9 @@ vector<Path> generate_population(vector<Node>& node_list) {
     return population;
 }
 
-vector<Path> tournament_selection(vector<Path>& population, int tournament_size) {
+vector<Path> tournament_selection(vector<Path>& population, long unsigned int tournament_size, int seed) {
     vector<Path> parents;
+    mt19937 gen(seed);
 
     if (tournament_size > population.size()) {
         throw std::invalid_argument("Tournament size cannot be larger than population size");
@@ -62,9 +63,9 @@ vector<Path> tournament_selection(vector<Path>& population, int tournament_size)
     int second_best_index = -1;
     double best_fitness = -std::numeric_limits<double>::infinity();
     double second_best_fitness = -std::numeric_limits<double>::infinity();
-
-    for (int i = 0; i < tournament_size; i++) {
-        int index = rand() % population.size();
+    
+    for (long unsigned int i = 0; i < tournament_size; i++) {
+        int index = gen() % population.size();
         if (population[index].fitness > best_fitness) {
             second_best_fitness = best_fitness;
             second_best_index = best_index;

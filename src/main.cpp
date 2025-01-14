@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 
-     string file_path = "instances/pla85900.tsp";
+     string file_path = "instances/a280.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      vector<Path> population = generate_population(node_list);
@@ -23,7 +23,7 @@ int main() {
           i++;
      }
 
-     vector<Path> parents = tournament_selection(population, 5);
+     vector<Path> parents = tournament_selection(population, TOURNAMENT_SIZE, SEED);
 
      cout << "Choosen Parents:\n";
      for (auto path : parents) {
