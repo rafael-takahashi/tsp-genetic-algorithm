@@ -78,7 +78,7 @@ pair<Path, Path> tournament_selection(vector<Path>& population, int seed) {
         throw runtime_error("Unable to select two parents");
 }
 
-pair<Path, Path> ox_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
     int size = parent1_seq.size();
 
     int cut_point1 = rand() % (size/2);
@@ -146,7 +146,7 @@ pair<Path, Path> ox_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_s
     return make_pair(offspring1, offspring2);
 }
 
-pair<Path, Path> pmx_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq) {
+pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq) {
     int size = parent1_seq.size();
 
     int cut_point1 = rand() % size;

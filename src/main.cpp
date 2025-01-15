@@ -30,7 +30,7 @@ int main() {
      while (generation != MAX_GENERATIONS) {
           auto [parent1, parent2] = tournament_selection(population, SEED);
 
-          auto [offspring1, offspring2] = pmx_crossover(parent1.node_sequence, parent2.node_sequence);
+          auto [offspring1, offspring2] = partially_mapped_crossover(parent1.node_sequence, parent2.node_sequence);
 
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1);
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2);

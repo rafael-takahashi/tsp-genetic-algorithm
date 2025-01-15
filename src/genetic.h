@@ -10,8 +10,8 @@ std::vector<Path> generate_population(const std::vector<Node>& node_list);
 
 std::pair<Path, Path> tournament_selection(std::vector<Path>& population, int seed);
 
-std::pair<Path, Path> ox_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
-std::pair<Path, Path> pmx_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
+std::pair<Path, Path> order_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
+std::pair<Path, Path> partially_mapped_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq);
 
 void swap_mutation(Path& path);
 
