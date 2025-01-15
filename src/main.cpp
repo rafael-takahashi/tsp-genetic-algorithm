@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/fnl4461.tsp";
+     string file_path = "instances/u574.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      std::random_device rd;
@@ -30,10 +30,13 @@ int main() {
      while (generation != MAX_GENERATIONS) {
           auto [parent1, parent2] = tournament_selection(population, SEED);
 
-          auto [offspring1, offspring2] = partially_mapped_crossover(parent1.node_sequence, parent2.node_sequence);
+          auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence);
 
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1);
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2);
+
+          offspring1 = two_opt(offspring1);
+          offspring2 = two_opt(offspring2);
 
           auto [worst_idx, second_worst_idx] = find_two_worst_indexes(population);
           if (offspring1.fitness > population[worst_idx].fitness)
@@ -50,6 +53,8 @@ int main() {
 
           generation++;
      }
+
+     
 
     return 0;
 }
