@@ -12,11 +12,12 @@ int main() {
      string file_path = "instances/u574.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
-     std::random_device rd;
-     std::mt19937 gen(rd());
+     //random_device rd;
+     //mt19937 gen(rd());
+     mt19937 gen(SEED);
      uniform_real_distribution<> prob_dist(0.0, 1.0);
 
-     vector<Path> population = generate_population(node_list);
+     vector<Path> population = generate_population(node_list, gen);
 
      cout << "Initial population generated:\n";
      double average = 0.0;
@@ -28,12 +29,12 @@ int main() {
      int generation = 0;
 
      while (generation != MAX_GENERATIONS) {
-          auto [parent1, parent2] = tournament_selection(population, SEED);
+          auto [parent1, parent2] = tournament_selection(population, gen);
 
-          auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence);
+          auto [offspring1, offspring2] = partially_mapped_crossover(parent1.node_sequence, parent2.node_sequence, gen);
 
-          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1);
-          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2);
+          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
+          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
 
           offspring1 = two_opt(offspring1);
           offspring2 = two_opt(offspring2);
@@ -53,8 +54,6 @@ int main() {
 
           generation++;
      }
-
-     
 
     return 0;
 }

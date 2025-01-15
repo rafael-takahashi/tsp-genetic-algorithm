@@ -9,13 +9,12 @@
 
 using namespace std;
 
-Path generate_random_path(const vector<Node>& node_list, int seed) {
+Path generate_random_path(const vector<Node>& node_list, mt19937& gen) {
     vector<Node> node_sequence;
     double res_distance = 0;
     vector<int> unvisited;
     for (long unsigned int i = 0; i < node_list.size(); i++)
         unvisited.push_back(i);
-    mt19937 gen(seed);
 
     int random_index = gen() % unvisited.size();
     int current = unvisited[random_index];
@@ -39,18 +38,16 @@ Path generate_random_path(const vector<Node>& node_list, int seed) {
     return Path(res_distance, node_sequence, calculate_fitness(res_distance));
 }
 
-vector<Path> generate_population(const vector<Node>& node_list) {
+vector<Path> generate_population(const vector<Node>& node_list, mt19937& gen) {
     vector<Path> population;
     
     for (int i = 0; i < POPULATION_SIZE; i++) 
-        population.push_back(generate_random_path(node_list, SEED + i));
+        population.push_back(generate_random_path(node_list, gen));
         
     return population;
 }
 
-pair<Path, Path> tournament_selection(vector<Path>& population, int seed) {
-    mt19937 gen(seed);
-
+pair<Path, Path> tournament_selection(vector<Path>& population, mt19937& gen) {
     if (TOURNAMENT_SIZE > int(population.size()))
         throw invalid_argument("Tournament size cannot be larger than population size");
 
@@ -60,7 +57,7 @@ pair<Path, Path> tournament_selection(vector<Path>& population, int seed) {
     double parent2_fit = -numeric_limits<double>::infinity();
     
     for (int i = 0; i < TOURNAMENT_SIZE; i++) {
-        int index = (gen() + i) % int(population.size());
+        int index = gen() % int(population.size());
         if (population[index].fitness > parent1_fit) {
             parent2_fit = parent1_fit;
             parent2_idx = parent1_idx;
@@ -78,11 +75,11 @@ pair<Path, Path> tournament_selection(vector<Path>& population, int seed) {
         throw runtime_error("Unable to select two parents");
 }
 
-pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq){
+pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq, mt19937& gen) {
     int size = parent1_seq.size();
 
-    int cut_point1 = rand() % (size/2);
-    int cut_point2 = cut_point1 + (rand() % (size/2));
+    int cut_point1 = gen() % (size/2);
+    int cut_point2 = cut_point1 + (gen() % (size/2));
 
     if (cut_point1 > cut_point2) 
         swap(cut_point1, cut_point2);
@@ -146,11 +143,11 @@ pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent
     return make_pair(offspring1, offspring2);
 }
 
-pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq) {
+pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<Node>& parent2_seq, mt19937& gen) {
     int size = parent1_seq.size();
 
-    int cut_point1 = rand() % size;
-    int cut_point2 = rand() % (size - cut_point1);
+    int cut_point1 = gen() % size;
+    int cut_point2 = gen() % (size - cut_point1);
 
     vector<Node> offspring1_seq(size);
     vector<Node> offspring2_seq(size);
@@ -194,14 +191,14 @@ pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<No
     return make_pair(offspring1, offspring2);
 }
 
-void swap_mutation(Path& path) {
+void swap_mutation(Path& path, mt19937& gen) {
     int size = path.size;
 
-    int i = rand() % size;
-    int j = rand() % size;
+    int i = gen() % size;
+    int j = gen() % size;
 
     while (i == j) 
-            j = rand() % size;
+            j = gen() % size;
     
 
     swap(path.node_sequence[i], path.node_sequence[j]);
