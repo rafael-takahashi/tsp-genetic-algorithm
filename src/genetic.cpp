@@ -147,7 +147,7 @@ pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<No
     int size = parent1_seq.size();
 
     int cut_point1 = gen() % size;
-    int cut_point2 = gen() % (size - cut_point1);
+    int cut_point2 = cut_point1 + (gen() % (size - cut_point1));
 
     vector<Node> offspring1_seq(size);
     vector<Node> offspring2_seq(size);
@@ -194,17 +194,15 @@ pair<Path, Path> partially_mapped_crossover(vector<Node>& parent1_seq, vector<No
 void swap_mutation(Path& path, mt19937& gen) {
     int size = path.size;
 
-    int i = gen() % size;
-    int j = gen() % size;
+    int i = 1 + gen() % (size - 2);
+    int j = i + (gen() % (size - i));
 
-    while (i == j) 
-            j = gen() % size;
-    
-
-    swap(path.node_sequence[i], path.node_sequence[j]);
+    if (i == j || j == size - 1) return;
 
     path.distance += calculate_swap_delta(i, j, path.node_sequence, size);
     path.fitness = calculate_fitness(path.distance);
+    
+    swap(path.node_sequence[i], path.node_sequence[j]);
 }
 
 pair<int, int> find_two_worst_indexes(vector<Path>& population) {

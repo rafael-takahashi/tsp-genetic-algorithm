@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/u574.tsp";
+     string file_path = "instances/pr1002.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      //random_device rd;
@@ -54,6 +54,14 @@ int main() {
 
           generation++;
      }
+
+     /*
+     for (auto path : population) {
+          cout << "Path distance: " << path.distance << "\n";
+          for (auto node : path.node_sequence) 
+               cout << node.id << " ";
+          cout << '\n';
+     }*/
 
     return 0;
 }
