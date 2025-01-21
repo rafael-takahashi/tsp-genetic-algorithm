@@ -9,11 +9,9 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/pr1002.tsp";
+     string file_path = "instances/u574.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
-     //random_device rd;
-     //mt19937 gen(rd());
      mt19937 gen(SEED);
      uniform_real_distribution<> prob_dist(0.0, 1.0);
 
@@ -27,8 +25,9 @@ int main() {
      cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
      int generation = 0;
+     int iterations_without_improvement = 0;
 
-     while (generation != MAX_GENERATIONS) {
+     while (iterations_without_improvement <= NO_IMPROVEMENT_TOLERANCE && generation != MAX_GENERATIONS) {
           auto [parent1, parent2] = tournament_selection(population, gen);
 
           auto [offspring1, offspring2] = partially_mapped_crossover(parent1.node_sequence, parent2.node_sequence, gen);
@@ -46,22 +45,33 @@ int main() {
                population[second_worst_idx] = offspring2;
 
           cout << generation + 1 << "º Generation average: ";
-          average = 0.0;
+          double new_average = 0.0;
           for (auto path : population) 
-               average += path.distance;
-          average /= POPULATION_SIZE;
-          cout << fixed << setprecision(15) << average << "\n";
+               new_average += path.distance;
+          new_average /= POPULATION_SIZE;
+          cout << fixed << setprecision(15) << new_average << "\n";
 
+          if (new_average < average) {
+               average = new_average;
+               iterations_without_improvement = 0;
+          } else 
+               iterations_without_improvement++;
+               
           generation++;
      }
 
-     /*
+     Path best_path = population[0];
+
      for (auto path : population) {
-          cout << "Path distance: " << path.distance << "\n";
-          for (auto node : path.node_sequence) 
-               cout << node.id << " ";
-          cout << '\n';
-     }*/
+          if (best_path.fitness < path.fitness) 
+               best_path = path;
+     }
+
+     cout << "\nBest path found:\n";
+     for (auto node : best_path.node_sequence) 
+          cout << node.id << " ";
+     cout << "\nDistance: " << best_path.distance << "\n";
+     cout << "Fitness: " << best_path.fitness << "\n\n";
 
     return 0;
 }
