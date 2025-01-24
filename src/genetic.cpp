@@ -115,22 +115,23 @@ pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent
         i++;
     }
 
-    int pointer2 = cut_point1;
+    int pointer2 = cut_point2; 
     i = 0;
     while (i < size) {
         bool found = false;
         int node_id = parent1_seq[i].id;
-
         int j = 0;
         while (j < size && !found) {
-            if (offspring2_seq[j].id == node_id)
+            if (offspring2_seq[j].id == node_id) {
                 found = true;
+            }
             j++;
         }
 
         if (!found) {
-            if (pointer2 >= size)
-                pointer2 = 0;
+            while (offspring2_seq[pointer2].id != -1) {
+                pointer2 = (pointer2 + 1) % size;
+            }
             offspring2_seq[pointer2] = parent1_seq[i];
             pointer2++;
         }
