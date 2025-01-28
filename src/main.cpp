@@ -9,12 +9,13 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/u574.tsp";
+     string file_path = "instances/pcb1173.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      mt19937 gen(SEED);
      uniform_real_distribution<> prob_dist(0.0, 1.0);
 
+     auto start = chrono::high_resolution_clock::now();
      vector<Path> population = generate_population(node_list, gen);
 
      cout << "Initial population generated:\n";
@@ -25,12 +26,13 @@ int main() {
      cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
      int generation = 0;
+     int generations_best = 0;
      int iterations_without_improvement = 0;
 
      while (iterations_without_improvement <= NO_IMPROVEMENT_TOLERANCE && generation != MAX_GENERATIONS) {
           auto [parent1, parent2] = tournament_selection(population, gen);
 
-          auto [offspring1, offspring2] = partially_mapped_crossover(parent1.node_sequence, parent2.node_sequence, gen);
+          auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
 
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
@@ -44,16 +46,17 @@ int main() {
           if (offspring1.fitness > population[second_worst_idx].fitness)
                population[second_worst_idx] = offspring2;
 
-          cout << generation + 1 << "º Generation average: ";
+          //cout << generation + 1 << "º Generation average: ";
           double new_average = 0.0;
           for (auto path : population) 
                new_average += path.distance;
           new_average /= POPULATION_SIZE;
-          cout << fixed << setprecision(15) << new_average << "\n";
+          //cout << fixed << setprecision(15) << new_average << "\n";
 
           if (new_average < average) {
                average = new_average;
                iterations_without_improvement = 0;
+               generations_best = generation;
           } else 
                iterations_without_improvement++;
                
@@ -66,12 +69,17 @@ int main() {
           if (best_path.fitness < path.fitness) 
                best_path = path;
      }
+     auto elapsed = chrono::high_resolution_clock::now();
 
-     cout << "\nBest path found:\n";
-     for (auto node : best_path.node_sequence) 
-          cout << node.id << " ";
-     cout << "\nDistance: " << best_path.distance << "\n";
+     //cout << "\nBest path found:\n";
+     /*for (auto node : best_path.node_sequence) 
+          cout << node.id << " ";*/
+     cout << "\nGeneration: " << generations_best << "\n";
+     cout << "Distance: " << best_path.distance << "\n";
      cout << "Fitness: " << best_path.fitness << "\n\n";
+     cout << "Execution time: "
+     << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
+     << " m/s";
 
     return 0;
 }
