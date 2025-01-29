@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/pcb1173.tsp";
+     string file_path = "instances/u574.tsp";
      vector<Node> node_list = tsp_to_vector(file_path);
 
      mt19937 gen(SEED);
@@ -28,6 +28,7 @@ int main() {
      int generation = 0;
      int generations_best = 0;
      int iterations_without_improvement = 0;
+     double new_average = 0.0;
 
      while (iterations_without_improvement <= NO_IMPROVEMENT_TOLERANCE && generation != MAX_GENERATIONS) {
           auto [parent1, parent2] = tournament_selection(population, gen);
@@ -37,8 +38,10 @@ int main() {
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
           if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
 
-          offspring1 = two_opt(offspring1);
-          offspring2 = two_opt(offspring2);
+          double average_fitness = calculate_fitness(average);
+
+          if (offspring1.fitness < average_fitness) offspring1 = two_opt(offspring1);
+          if (offspring2.fitness < average_fitness) offspring2 = two_opt(offspring2);
 
           auto [worst_idx, second_worst_idx] = find_two_worst_indexes(population);
           if (offspring1.fitness > population[worst_idx].fitness)
@@ -46,14 +49,14 @@ int main() {
           if (offspring1.fitness > population[second_worst_idx].fitness)
                population[second_worst_idx] = offspring2;
 
-          //cout << generation + 1 << "º Generation average: ";
-          double new_average = 0.0;
+          cout << generation + 1 << "º Generation average: ";
+          new_average = 0.0;
           for (auto path : population) 
                new_average += path.distance;
           new_average /= POPULATION_SIZE;
-          //cout << fixed << setprecision(15) << new_average << "\n";
+          cout << fixed << setprecision(15) << new_average << "\n";
 
-          if (new_average < average) {
+          if (new_average < average - 10.0) {
                average = new_average;
                iterations_without_improvement = 0;
                generations_best = generation;
@@ -79,7 +82,7 @@ int main() {
      cout << "Fitness: " << best_path.fitness << "\n\n";
      cout << "Execution time: "
      << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
-     << " m/s";
+     << " ms\n";
 
     return 0;
 }
