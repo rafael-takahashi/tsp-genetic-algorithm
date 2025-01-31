@@ -1,0 +1,5 @@
+Generation: 345
+Distance: 2716.018156426681344
+Fitness: 0.000368186051199
+
+Execution time: 3847 ms

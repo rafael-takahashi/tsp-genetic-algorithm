@@ -1,0 +1,5 @@
+Generation: 9
+Distance: 160137009.625390291213989
+Fitness: 0.000000006244653
+
+Execution time: 36289555 ms

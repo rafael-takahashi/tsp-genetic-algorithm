@@ -14,5 +14,5 @@ instances/*
 !instances/pla33810.tsp
 !instances/pla85900.tsp
 
-plot/data.txt
+plot/data/data.txt
 plot/plot.png

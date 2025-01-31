@@ -1,0 +1,5 @@
+Generation: 182
+Distance: 75083813.459551990032196
+Fitness: 0.000000013318450
+
+Execution time: 36029118 ms

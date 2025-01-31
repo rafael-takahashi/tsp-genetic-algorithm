@@ -9,7 +9,8 @@
 using namespace std;
 
 int main() {
-     string file_path = "instances/a280.tsp";
+     string file_path = "instances/u574.tsp";
+
      vector<Node> node_list = tsp_to_vector(file_path);
 
      mt19937 gen(SEED);
@@ -31,10 +32,6 @@ int main() {
      double new_average = 0.0;
 
      while (iterations_without_improvement <= NO_IMPROVEMENT_TOLERANCE && generation != MAX_GENERATIONS) {
-          auto now = chrono::high_resolution_clock::now();
-          auto duration = chrono::duration_cast<chrono::milliseconds>(now - start);
-          if (duration.count() >= 1000) break;
-
           auto [parent1, parent2] = tournament_selection(population, gen);
 
           auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
@@ -53,13 +50,15 @@ int main() {
           if (offspring1.fitness > population[second_worst_idx].fitness)
                population[second_worst_idx] = offspring2;
 
+          /*
           cout << generation + 1 << "º Generation average: ";
           new_average = 0.0;
           for (auto path : population) 
                new_average += path.distance;
           new_average /= POPULATION_SIZE;
           cout << fixed << setprecision(15) << new_average << "\n";
-
+          */
+         
           if (new_average < average - 10.0) {
                average = new_average;
                iterations_without_improvement = 0;
@@ -76,32 +75,15 @@ int main() {
           if (best_path.fitness < path.fitness) 
                best_path = path;
      }
+
      auto elapsed = chrono::high_resolution_clock::now();
 
-     //cout << "\nBest path found:\n";
-     /*for (auto node : best_path.node_sequence) 
-          cout << node.id << " ";*/
      cout << "\nGeneration: " << generations_best << "\n";
      cout << "Distance: " << best_path.distance << "\n";
      cout << "Fitness: " << best_path.fitness << "\n\n";
      cout << "Execution time: "
      << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
      << " ms\n";
-
-     ofstream outputFile("plot/data.txt");
-
-    if (outputFile.is_open()) {
-          outputFile << fixed << setprecision(15);
-          outputFile << "Generation: " << generations_best << "\n";
-          outputFile << "Distance: " << best_path.distance << "\n";
-          outputFile << "Fitness: " << best_path.fitness << "\n\n";
-          outputFile << "Execution time: "
-                    << chrono::duration_cast<chrono::milliseconds>(elapsed - start).count() 
-                    << " ms";
-        
-        outputFile.close();
-    } 
-    else cerr << "Error: Could not open file for writing!\n";
 
     return 0;
 }
