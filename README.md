@@ -1,19 +1,13 @@
-# Problema do Caixeiro Viajante
-
-Este projeto implementa algoritmos que encontram soluções para o Problema do Caixeiro Viajante (TSP) utilizando heurísticas construtivas e de busca local:
-
-- Vizinho mais próximo
-- Inserção mais distante
-- 2-Opt
-- Pair Swap
-
-## Como utilizar o código
+# Como utilizar o código
 
 ### Instâncias
-O programa executa uma instância de sua escolha por vez. Só poderá ser escolhida a instância se ela estiver disponível na pasta "instances". Dessa forma, caso deseje testar uma instância diferente, ela deve estar dentro da pasta "instances".
+Para escolher sua instância, altere a variável ```file_path``` em ```src/main.cpp```. A instância escolhida deve estar presente no diretório ```instances/```
+
+### Parâmetros
+Você pode alterar os parâmetros utilizados pelo algoritmo genético em ```src/path.cpp```
 
 ### Compilação
-No terminal, compile o código utilizando:
+No terminal, compile o código executando o seguinte comando:
 
 ```
     g++ src/*.cpp
@@ -21,4 +15,4 @@ No terminal, compile o código utilizando:
 
 ### Execução
 
-Execute o arquivo de saída gerado e siga as instruções da interface.
+Execute o arquivo de saída gerado após a compilação.
