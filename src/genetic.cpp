@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <random>
+#include <assert.h>
 
 using namespace std;
 
@@ -79,13 +80,17 @@ pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent
     int size = parent1_seq.size();
 
     int cut_point1 = gen() % (size/2);
-    int cut_point2 = cut_point1 + (gen() % (size/2));
+    uniform_int_distribution<int> dist_cut2(cut_point1, size - 1);
+    int cut_point2 = dist_cut2(gen);
 
     if (cut_point1 > cut_point2) 
         swap(cut_point1, cut_point2);
 
-    vector<Node> offspring1_seq(size);
-    vector<Node> offspring2_seq(size);
+    Node sentinel_node;
+    sentinel_node.id = -1;
+
+    vector<Node> offspring1_seq(size, sentinel_node);
+    vector<Node> offspring2_seq(size, sentinel_node);
 
     for (int i = cut_point1; i < cut_point2; i++) {
         offspring1_seq[i] = parent1_seq[i];
@@ -129,6 +134,7 @@ pair<Path, Path> order_crossover(vector<Node>& parent1_seq, vector<Node>& parent
         }
 
         if (!found) {
+            pointer2 = pointer2 % size;
             while (offspring2_seq[pointer2].id != -1) {
                 pointer2 = (pointer2 + 1) % size;
             }

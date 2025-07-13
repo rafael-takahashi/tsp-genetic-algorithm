@@ -50,14 +50,12 @@ int main() {
           if (offspring1.fitness > population[second_worst_idx].fitness)
                population[second_worst_idx] = offspring2;
 
-          /*
           cout << generation + 1 << "º Generation average: ";
           new_average = 0.0;
           for (auto path : population) 
                new_average += path.distance;
           new_average /= POPULATION_SIZE;
           cout << fixed << setprecision(15) << new_average << "\n";
-          */
          
           if (new_average < average - 10.0) {
                average = new_average;

@@ -57,7 +57,7 @@ Path nearest_neighbor(vector<Node>& node_list) {
 
     while (node_sequence.size() < node_list.size()) {
         double min_distance = numeric_limits<double>::max();
-        int next;
+        int next = -1;
 
         for (size_t i = 0; i < node_list.size(); i++) {
             if (visited[i] == false) {
@@ -67,6 +67,11 @@ Path nearest_neighbor(vector<Node>& node_list) {
                     next = i;
                 }
             }
+        }
+
+        if (next == -1) {
+            cerr << "Error: No unvisited node found (bug in logic?)\n";
+            exit(1);
         }
 
         node_sequence.push_back(node_list[next]);
