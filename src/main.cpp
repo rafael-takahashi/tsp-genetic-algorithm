@@ -30,38 +30,42 @@ int main() {
      int iterations_without_improvement = 0;
      double new_average = 0.0;
 
-     while (iterations_without_improvement <= NO_IMPROVEMENT_TOLERANCE && generation != MAX_GENERATIONS) {
-          auto [parent1, parent2] = tournament_selection(population, gen);
+     while (generation != MAX_GENERATIONS) {
+          vector<Path> new_population;
+          new_population.reserve(POPULATION_SIZE);
 
-          auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
-
-          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
-          if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
+          vector<int> elite_indexes = get_elite_indexes(population);
+          for (int idx : elite_indexes)
+               new_population.push_back(population[idx]);
 
           double average_fitness = calculate_fitness(average);
 
-          if (offspring1.fitness < average_fitness) offspring1 = two_opt(offspring1);
-          if (offspring2.fitness < average_fitness) offspring2 = two_opt(offspring2);
+          while (new_population.size() < POPULATION_SIZE) {
+               auto [parent1, parent2] = tournament_selection(population, gen);
 
-          auto [worst_idx, second_worst_idx] = find_two_worst_indexes(population);
-          if (offspring1.fitness > population[worst_idx].fitness)
-               population[worst_idx] = offspring1;
-          if (offspring1.fitness > population[second_worst_idx].fitness)
-               population[second_worst_idx] = offspring2;
+               auto [offspring1, offspring2] =
+                    order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
 
+               if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
+               if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
+
+               if (prob_dist(gen) < LOCAL_OPT_RATE) offspring1 = two_opt(offspring1);
+               if (prob_dist(gen) < LOCAL_OPT_RATE) offspring2 = two_opt(offspring2);
+
+               new_population.push_back(offspring1);
+               if (new_population.size() < POPULATION_SIZE)
+                    new_population.push_back(offspring2);
+          }
+
+          population = move(new_population);
+          
           cout << generation + 1 << "º Generation average: ";
           new_average = 0.0;
           for (auto path : population) 
                new_average += path.distance;
           new_average /= POPULATION_SIZE;
           cout << fixed << setprecision(15) << new_average << "\n";
-         
-          if (new_average < average) {
-               average = new_average;
-               iterations_without_improvement = 0;
-          } else 
-               iterations_without_improvement++;
-               
+
           generation++;
      }
 

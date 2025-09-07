@@ -6,7 +6,7 @@
 
 #include <algorithm>
 #include <random>
-#include <assert.h>
+#include <queue>
 
 using namespace std;
 
@@ -203,23 +203,33 @@ void swap_mutation(Path& path, mt19937& gen) {
     swap(path.node_sequence[i], path.node_sequence[j]);
 }
 
-pair<int, int> find_two_worst_indexes(vector<Path>& population) {
-    int worst_idx = -1;
-    int second_worst_idx = -1;
-    double worst_fitness = numeric_limits<double>::infinity();
-    double second_worst_fitness = numeric_limits<double>::infinity();
+struct CompareFitness {
+    bool operator()(const pair<int, double>& a, const pair<int, double>& b) {
+        return a.second < b.second;
+    }
+};
 
-    for (long unsigned int i = 0; i < population.size(); i++) {
-        if (population[i].fitness < worst_fitness) {
-            second_worst_fitness = worst_fitness;
-            second_worst_idx = worst_idx;
-            worst_fitness = population[i].fitness;
-            worst_idx = i;
-        } else if (population[i].fitness < second_worst_fitness) {
-            second_worst_fitness = population[i].fitness;
-            second_worst_idx = i;
+vector<int> get_elite_indexes(const vector<Path>& population) {
+    priority_queue<pair<int, double>,
+                    vector<pair<int, double>>,
+                    CompareFitness> heap;
+
+    for (size_t i = 0; i < population.size(); i++) {
+        double fit = population[i].fitness;
+        if (heap.size() < ELITE_SIZE)
+            heap.push({static_cast<int>(i), fit});
+        else if (fit < heap.top().second) {
+            heap.pop();
+            heap.push({static_cast<int>(i), fit});
         }
     }
 
-    return make_pair(worst_idx, second_worst_idx);
+    vector<int> elite_indexes;
+    elite_indexes.reserve(ELITE_SIZE);
+    while (!heap.empty()) {
+        elite_indexes.push_back(heap.top().first);
+        heap.pop();
+    }
+
+    return elite_indexes;
 }

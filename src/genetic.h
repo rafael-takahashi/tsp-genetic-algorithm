@@ -16,4 +16,4 @@ std::pair<Path, Path> partially_mapped_crossover(std::vector<Node>& parent1_seq,
 
 void swap_mutation(Path& path, std::mt19937& gen);
 
-std::pair<int, int> find_two_worst_indexes(std::vector<Path>& population);
+std::vector<int> get_elite_indexes(const std::vector<Path>& population);
