@@ -11,47 +11,38 @@
 using namespace std;
 
 Path generate_random_path(const vector<Node>& node_list, mt19937& gen) {
-    vector<Node> node_sequence;
+    size_t node_list_length = node_list.size();
+
+    vector<int> indexes(node_list_length);
+    iota(indexes.begin(), indexes.end(), 0);
+
+    shuffle(indexes.begin(), indexes.end(), gen);
+
+    vector<Node> node_sequence(node_list_length);
     double res_distance = 0;
-    vector<int> unvisited;
-    for (long unsigned int i = 0; i < node_list.size(); i++)
-        unvisited.push_back(i);
 
-    int random_index = gen() % unvisited.size();
-    int current = unvisited[random_index];
-    node_sequence.push_back(node_list[current]);
-
-    unvisited.erase(unvisited.begin() + random_index);
-
-    while (!unvisited.empty()) {
-        random_index = gen() % unvisited.size();
-        int next = unvisited[random_index];
-        node_sequence.push_back(node_list[next]);
-
-        double distance = calculate_distance(node_list[current], node_list[next]);
-        res_distance += distance;
-
-        unvisited.erase(unvisited.begin() + random_index);
-
-        current = next;
+    for (size_t i = 0; i < node_list_length; i++) {
+        node_sequence[i] = node_list[indexes[i]];
+        if (i > 0) {
+            res_distance += calculate_distance(
+                node_list[indexes[i-1]], node_list[indexes[i]]
+            );
+        }
     }
 
     return Path(res_distance, node_sequence, calculate_fitness(res_distance));
 }
 
 vector<Path> generate_population(const vector<Node>& node_list, mt19937& gen) {
-    vector<Path> population;
+    vector<Path> population(POPULATION_SIZE);
     
     for (int i = 0; i < POPULATION_SIZE; i++) 
-        population.push_back(generate_random_path(node_list, gen));
+        population[i] = generate_random_path(node_list, gen);
         
     return population;
 }
 
 pair<Path, Path> tournament_selection(vector<Path>& population, mt19937& gen) {
-    if (TOURNAMENT_SIZE > int(population.size()))
-        throw invalid_argument("Tournament size cannot be larger than population size");
-
     int parent1_idx = -1;
     int parent2_idx = -1;
     double parent1_fit = -numeric_limits<double>::infinity();

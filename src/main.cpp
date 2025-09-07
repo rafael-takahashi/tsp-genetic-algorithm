@@ -27,7 +27,6 @@ int main() {
      cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
      int generation = 0;
-     int generations_best = 0;
      int iterations_without_improvement = 0;
      double new_average = 0.0;
 
@@ -57,10 +56,9 @@ int main() {
           new_average /= POPULATION_SIZE;
           cout << fixed << setprecision(15) << new_average << "\n";
          
-          if (new_average < average - 10.0) {
+          if (new_average < average) {
                average = new_average;
                iterations_without_improvement = 0;
-               generations_best = generation;
           } else 
                iterations_without_improvement++;
                
@@ -68,15 +66,12 @@ int main() {
      }
 
      Path best_path = population[0];
-
-     for (auto path : population) {
+     for (auto path : population)
           if (best_path.fitness < path.fitness) 
                best_path = path;
-     }
 
      auto elapsed = chrono::high_resolution_clock::now();
 
-     cout << "\nGeneration: " << generations_best << "\n";
      cout << "Distance: " << best_path.distance << "\n";
      cout << "Fitness: " << best_path.fitness << "\n\n";
      cout << "Execution time: "
