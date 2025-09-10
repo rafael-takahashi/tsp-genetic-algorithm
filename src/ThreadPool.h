@@ -15,11 +15,11 @@ public:
     ThreadPool();
     ~ThreadPool();
 
-    template<class F, class... Args>
-    auto enqueue(F&& f, Args&&... args)
-        -> std::future<typename std::invoke_result_t<F, std::mt19937&, Args...>>;
+    std::future<void> enqueue(std::function<void(std::mt19937&, int, int)> task);
 
 private:
+    std::vector<int> thread_starts_;
+    std::vector<int> thread_ends_;
     std::vector<std::thread> threads_;
     std::vector<std::mt19937> generators_;
     std::queue<std::function<void(int)>> queue_;
@@ -27,7 +27,5 @@ private:
     std::condition_variable condition_;
     bool stop_ = false;
 };
-
-#include "ThreadPool.tpp"
 
 #endif
