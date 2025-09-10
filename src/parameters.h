@@ -7,3 +7,5 @@ extern const float MUTATION_RATE;
 extern const float LOCAL_OPT_RATE;
 extern const int ELITE_SIZE;
 extern const int MAX_GENERATIONS;
+extern const int MAX_THREADS;
+
