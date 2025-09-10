@@ -33,36 +33,52 @@ int main() {
      ThreadPool pool;
      
      while (generation != MAX_GENERATIONS) {
-          vector<Path> new_population(POPULATION_SIZE);
+          vector<Path> new_population;
+          new_population.reserve(POPULATION_SIZE);
           
           vector<int> elite_indexes = get_elite_indexes(population);
           for (int idx : elite_indexes)
           new_population.push_back(population[idx]);
           
-          vector<future<void>> futures(MAX_THREADS);
+          vector<future<vector<Path>>> futures;
+          futures.reserve(MAX_THREADS);
 
           for (int t = 0; t < MAX_THREADS; t++) {
-               futures[t] = (pool.enqueue([&](mt19937& generator, int start, int end) {
+               futures.push_back(pool.enqueue([&](mt19937& generator, int start, int end) {
+                    int segment_size = end - start;
                     uniform_real_distribution<double> prob_dist(0.0, 1.0);
+                    vector<Path> partial_population;
+                    partial_population.reserve(segment_size);
+        
+                    while ((int)partial_population.size() < segment_size) {
+                         auto [parent1, parent2] = tournament_selection(population, gen);
 
-                    for (int i = start; i < end; i++) {
-                         auto [parent1, parent2] = tournament_selection(population, generator);
+                         auto [offspring1, offspring2] =
+                              order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
 
-                         auto [offspring1, offspring2] = order_crossover(parent1.node_sequence, parent2.node_sequence, generator);
+                         if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
+                         if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
 
-                         if (prob_dist(generator) < MUTATION_RATE) swap_mutation(offspring1, generator);
-                         if (prob_dist(generator) < MUTATION_RATE) swap_mutation(offspring2, generator);
+                         if (prob_dist(gen) < LOCAL_OPT_RATE) offspring1 = two_opt(offspring1);
+                         if (prob_dist(gen) < LOCAL_OPT_RATE) offspring2 = two_opt(offspring2);
 
-                         if (prob_dist(generator) < LOCAL_OPT_RATE) offspring1 = two_opt(offspring1);
-                         if (prob_dist(generator) < LOCAL_OPT_RATE) offspring2 = two_opt(offspring2);
-
-                         new_population[i] = move(offspring1);
-                         if (i + 1 < end) new_population[i + 1] = move(offspring2);
+                         partial_population.push_back(move(offspring1));
+                         if ((int)partial_population.size() < segment_size)
+                              partial_population.push_back(move(offspring2));
                     }
+
+                    return partial_population;
                }));
           }
-
-          for (auto& fut : futures) fut.get();
+          
+          for (auto& fut : futures) {
+               auto part = fut.get();
+               new_population.insert(
+                    new_population.end(),
+                    make_move_iterator(part.begin()),
+                    make_move_iterator(part.end())
+               );
+          }
 
           population = move(new_population);
           

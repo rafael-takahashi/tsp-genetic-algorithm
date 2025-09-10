@@ -9,13 +9,16 @@
 #include <vector>
 #include <random>
 #include <future>
+#include "path.h"
 
 class ThreadPool {
 public:
     ThreadPool();
     ~ThreadPool();
 
-    std::future<void> enqueue(std::function<void(std::mt19937&, int, int)> task);
+    std::future<std::vector<Path>> enqueue(
+      std::function<std::vector<Path>(std::mt19937&, int, int)> task
+    );
 
 private:
     std::vector<int> thread_starts_;
