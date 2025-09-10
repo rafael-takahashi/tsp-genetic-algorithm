@@ -56,23 +56,20 @@ ThreadPool::~ThreadPool() {
     for (auto& thread : threads_) thread.join();
 }
 
-future<void> ThreadPool::enqueue(function<void(mt19937&, int, int)> task) {
-    auto wrapper = make_shared<packaged_task<void(mt19937&, int, int)>>(task);
-    future<void> res = wrapper->get_future();
-
+future<vector<Path>> ThreadPool::enqueue(function<vector<Path>(mt19937&, int, int)> task) {
+    auto wrapper = make_shared<packaged_task<vector<Path>(mt19937&, int, int)>>(task);
+    future<vector<Path>> res = wrapper->get_future(); 
     {
         unique_lock<mutex> lock(queue_mutex_);
-        if (stop_)
-            throw runtime_error("enqueue on stopped ThreadPool");
+        
+        if (stop_) throw runtime_error("enqueue on stopped ThreadPool");
 
         queue_.emplace([wrapper, this](int worker_index) {
             int start = thread_starts_[worker_index];
-            int end   = thread_ends_[worker_index];
-
+            int end = thread_ends_[worker_index];
             (*wrapper)(generators_[worker_index], start, end);
         });
-    }
-
+    } 
     condition_.notify_one();
     return res;
 }
