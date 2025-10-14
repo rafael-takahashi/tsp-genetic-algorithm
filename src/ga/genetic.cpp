@@ -36,7 +36,7 @@ Path generate_random_path(const vector<Node>& node_list, mt19937& gen) {
 vector<Path> generate_population(const vector<Node>& node_list, mt19937& gen) {
     vector<Path> population(POPULATION_SIZE);
     
-    for (int i = 0; i < POPULATION_SIZE; i++) 
+    for (size_t i = 0; i < POPULATION_SIZE; i++) 
         population[i] = generate_random_path(node_list, gen);
         
     return population;
@@ -48,7 +48,7 @@ pair<Path, Path> tournament_selection(vector<Path>& population, mt19937& gen) {
     double parent1_fit = -numeric_limits<double>::infinity();
     double parent2_fit = -numeric_limits<double>::infinity();
     
-    for (int i = 0; i < TOURNAMENT_SIZE; i++) {
+    for (size_t i = 0; i < TOURNAMENT_SIZE; i++) {
         int index = gen() % int(population.size());
         if (population[index].fitness > parent1_fit) {
             parent2_fit = parent1_fit;
@@ -250,7 +250,6 @@ int genetic_algorithm(std::string file_path) {
     cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
     int generation = 0;
-    int iterations_without_improvement = 0;
     double new_average = 0.0;
 
     while (generation != MAX_GENERATIONS) {
@@ -260,8 +259,6 @@ int genetic_algorithm(std::string file_path) {
         vector<int> elite_indexes = get_elite_indexes(population);
         for (int idx : elite_indexes)
             new_population.push_back(population[idx]);
-
-        double average_fitness = calculate_fitness(average);
 
         while (new_population.size() < POPULATION_SIZE) {
             auto [parent1, parent2] = tournament_selection(population, gen);
@@ -339,16 +336,16 @@ int parallel_genetic_algorithm(string file_path) {
                 partial_population.reserve(segment_size);
     
                 while ((int)partial_population.size() < segment_size) {
-                        auto [parent1, parent2] = tournament_selection(population, gen);
+                        auto [parent1, parent2] = tournament_selection(population, generator);
 
                         auto [offspring1, offspring2] =
-                            order_crossover(parent1.node_sequence, parent2.node_sequence, gen);
+                            order_crossover(parent1.node_sequence, parent2.node_sequence, generator);
 
-                        if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring1, gen);
-                        if (prob_dist(gen) < MUTATION_RATE) swap_mutation(offspring2, gen);
+                        if (prob_dist(generator) < MUTATION_RATE) swap_mutation(offspring1, generator);
+                        if (prob_dist(generator) < MUTATION_RATE) swap_mutation(offspring2, generator);
 
-                        if (prob_dist(gen) < LOCAL_OPT_RATE) offspring1 = two_opt(offspring1);
-                        if (prob_dist(gen) < LOCAL_OPT_RATE) offspring2 = two_opt(offspring2);
+                        if (prob_dist(generator) < LOCAL_OPT_RATE) offspring1 = two_opt(offspring1);
+                        if (prob_dist(generator) < LOCAL_OPT_RATE) offspring2 = two_opt(offspring2);
 
                         partial_population.push_back(move(offspring1));
                         if ((int)partial_population.size() < segment_size)
