@@ -1,19 +1,12 @@
 #pragma once
 
 #include <random>
+#include <string>
 #include <vector>
 
 #include "node.h"
 #include "path.h"
 
-Path generate_random_path(const std::vector<Node>& node_list, std::mt19937& gen);
-std::vector<Path> generate_population(const std::vector<Node>& node_list, std::mt19937& gen);
+int genetic_algorithm(std::string file_path);
 
-std::pair<Path, Path> tournament_selection(std::vector<Path>& population, std::mt19937& gen);
-
-std::pair<Path, Path> order_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq, std::mt19937& gen);
-std::pair<Path, Path> partially_mapped_crossover(std::vector<Node>& parent1_seq, std::vector<Node>& parent2_seq, std::mt19937& gen);
-
-void swap_mutation(Path& path, std::mt19937& gen);
-
-std::vector<int> get_elite_indexes(const std::vector<Path>& population);
+int parallel_genetic_algorithm(std::string file_path);
