@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "node.h"
+#include "tsp/node.h"
 #include "path.h"
 
 int genetic_algorithm(std::string file_path);

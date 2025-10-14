@@ -9,7 +9,7 @@
 #include <vector>
 #include <random>
 #include <future>
-#include "path.h"
+#include "ga/path.h"
 
 class ThreadPool {
 public:

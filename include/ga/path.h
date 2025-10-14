@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "node.h"
+#include "tsp/node.h"
 
 struct Path {
     double distance = 0.0;

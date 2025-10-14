@@ -1,5 +1,5 @@
-#include "ThreadPool.h"
-#include "parameters.h"
+#include "parallel/ThreadPool.h"
+#include "ga/parameters.h"
 
 using namespace std;
 

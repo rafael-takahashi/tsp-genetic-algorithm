@@ -1,9 +1,8 @@
-#include "genetic.h"
-
-#include "parameters.h"
-#include "path.h"
-#include "tsp.h"
-#include "ThreadPool.h"
+#include "ga/genetic.h"
+#include "ga/parameters.h"
+#include "ga/path.h"
+#include "tsp/tsp.h"
+#include "parallel/ThreadPool.h"
 
 #include <algorithm>
 #include <random>

@@ -1,4 +1,4 @@
-#include "tsp.h"
+#include "tsp/tsp.h"
 
 #include <chrono>
 #include <fstream>
@@ -6,8 +6,8 @@
 #include <queue>
 #include <sstream>
 
-#include "node.h"
-#include "path.h"
+#include "tsp/node.h"
+#include "ga/path.h"
 
 using namespace std;
 

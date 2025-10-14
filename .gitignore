@@ -1,18 +1,120 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# Compiled binaries
+*.exe
 *.out
-.vscode
-test.cpp
-TODO.txt
+*.app
+tsp_ga
+a.out
 
-instances/*
+# Object files
+*.o
+*.obj
+*.ko
+*.elf
 
-!instances/u574.tsp
-!instances/pcb1173.tsp
-!instances/pr1002.tsp
-!instances/brd14051.tsp
-!instances/fnl4461.tsp
-!instances/d15112.tsp
-!instances/pla33810.tsp
-!instances/pla85900.tsp
+# Precompiled Headers
+*.gch
+*.pch
 
-plot/data/data.txt
-plot/plot.png
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+Makefile
+
+# Results and output files
+results/*.csv
+results/*.txt
+results/*.json
+!results/.gitkeep
+
+# IDE specific files
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+
+# CLion / IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.cproject
+.project
+.settings/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+
+# Temporary files
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+*.log
+
+# Python (for your plotting scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+*.egg-info/
+dist/
+.ipynb_checkpoints/
+
+# Profiling and debugging
+*.dSYM/
+*.su
+*.idb
+*.pdb
+gmon.out
+callgrind.out.*
+perf.data*
+
+# Core dumps
+core
+core.*
+
+# Test outputs
+test_results/
+*.test
