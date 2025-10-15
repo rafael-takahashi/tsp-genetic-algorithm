@@ -69,3 +69,14 @@ vector<int> get_elite_indexes(const vector<Path>& population, size_t elite_size)
 
     return elite_indexes;
 }
+
+double get_average_distance(const vector<Path>& population) {
+    double sum = 0.0;
+    for (auto& path : population) sum += path.distance;
+    return sum / population.size();
+}
+
+Path get_best_path(const vector<Path>& population) {
+    return *max_element(population.begin(), population.end(),
+                        [](const Path& a, const Path& b){ return a.fitness < b.fitness; });
+}

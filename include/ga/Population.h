@@ -20,3 +20,6 @@ std::vector<int> get_elite_indexes(
     const std::vector<Path>& population,
     size_t elite_size
 );
+
+double get_average_distance(const std::vector<Path>& population);
+Path get_best_path(const std::vector<Path>& population);

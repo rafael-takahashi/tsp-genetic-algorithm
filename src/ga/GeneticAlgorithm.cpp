@@ -21,14 +21,10 @@ int genetic_algorithm(string file_path, GAParameters params) {
     vector<Path> population = generate_population(node_list, gen);
 
     cout << "Initial population generated:\n";
-    double average = 0.0;
-    for (auto path : population) 
-        average += path.distance;
-    average /= params.population_size;
+    double average = get_average_distance(population);
     cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
     int generation = 0;
-    double new_average = 0.0;
 
     while (generation != params.max_generations) {
         vector<Path> new_population;
@@ -58,19 +54,13 @@ int genetic_algorithm(string file_path, GAParameters params) {
         population = move(new_population);
         
         cout << generation + 1 << "º Generation average: ";
-        new_average = 0.0;
-        for (auto path : population) 
-            new_average += path.distance;
-        new_average /= params.population_size;
-        cout << fixed << setprecision(15) << new_average << "\n";
+        average = get_average_distance(population);
+        cout << fixed << setprecision(15) << average << "\n";
 
         generation++;
     }
 
-    Path best_path = population[0];
-    for (auto path : population)
-        if (best_path.fitness < path.fitness) 
-            best_path = path;
+    Path best_path = get_best_path(population);
 
     return 0;
 }
@@ -84,14 +74,10 @@ int parallel_genetic_algorithm(string file_path, GAParameters params, int num_th
     vector<Path> population = generate_population(node_list, gen);
 
     cout << "Initial population generated:\n";
-    double average = 0.0;
-    for (auto path : population) 
-        average += path.distance;
-    average /= params.population_size;
+    double average = get_average_distance(population);
     cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
     int generation = 0;
-    double new_average = 0.0;
 
     ThreadPool pool(params.population_size - params.elite_size, num_threads);
     
@@ -146,19 +132,13 @@ int parallel_genetic_algorithm(string file_path, GAParameters params, int num_th
         population = move(new_population);
         
         cout << generation + 1 << "º Generation average: ";
-        new_average = 0.0;
-        for (auto path : population) 
-            new_average += path.distance;
-        new_average /= params.population_size;
-        cout << fixed << setprecision(15) << new_average << "\n";
+        average = get_average_distance(population);
+        cout << fixed << setprecision(15) << average << "\n";
 
         generation++;
     }
 
-    Path best_path = population[0];
-    for (auto path : population)
-        if (best_path.fitness < path.fitness) 
-            best_path = path;
+    Path best_path = get_best_path(population);
 
     return 0;
 }
