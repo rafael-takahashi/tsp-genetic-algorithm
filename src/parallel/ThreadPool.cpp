@@ -1,49 +1,48 @@
 #include "parallel/ThreadPool.h"
-#include "ga/parameters.h"
+#include "ga/Parameters.h"
 
 using namespace std;
 
-ThreadPool::ThreadPool() {
-    int total_to_generate = POPULATION_SIZE - ELITE_SIZE;
-    int segment_size = total_to_generate / MAX_THREADS;
-    int remainder = total_to_generate % MAX_THREADS;
+ThreadPool::ThreadPool(int work_size, int num_threads) {
+    int segment_size = work_size / num_threads;
+    int remainder = work_size % num_threads;
 
-    thread_starts_.resize(MAX_THREADS);
-    thread_ends_.resize(MAX_THREADS);
+    thread_starts_.resize(num_threads);
+    thread_ends_.resize(num_threads);
 
     int offset = 0;
-    for (int i = 0; i < MAX_THREADS; i++) {
+    for (int i = 0; i < num_threads; i++) {
         int seg = segment_size + (i < remainder ? 1 : 0);
         thread_starts_[i] = offset;
         thread_ends_[i] = offset + seg;
         offset += seg;
     }
 
-    generators_.resize(MAX_THREADS);
+    generators_.resize(num_threads);
     
-    for (int i = 0; i < MAX_THREADS; i++) {
-        generators_[i].seed(SEED + i);
+    for (int i = 0; i < num_threads; i++) {
+        generators_[i].seed(42 + i);
         threads_.emplace_back([this, i] {
-        while (true) {
-            function<void(int)> task;
-            {
-                unique_lock<mutex> lock(queue_mutex_);
-                
-                condition_.wait(lock, [this] {
-                    return !queue_.empty() || stop_;
-                });
-                
-                if (stop_ && queue_.empty()) return;
-                
-                task = move(queue_.front());
-                queue_.pop();
+            while (true) {
+                function<void(int)> task;
+                {
+                    unique_lock<mutex> lock(queue_mutex_);
+                    
+                    condition_.wait(lock, [this] {
+                        return !queue_.empty() || stop_;
+                    });
+                    
+                    if (stop_ && queue_.empty()) return;
+                    
+                    task = move(queue_.front());
+                    queue_.pop();
 
-                lock.unlock();
+                    lock.unlock();
+                }
+                task(i);
             }
-            task(i);
-        }
         });
-  }
+    }
 }
 
 ThreadPool::~ThreadPool() {

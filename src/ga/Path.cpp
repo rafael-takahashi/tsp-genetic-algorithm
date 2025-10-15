@@ -1,4 +1,4 @@
-#include "ga/path.h"
+#include "ga/Path.h"
 
 double calculate_fitness(double distance) {
     return 1.0 / distance;

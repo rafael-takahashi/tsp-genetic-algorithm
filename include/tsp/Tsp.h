@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "tsp/node.h"
-#include "ga/path.h"
+#include "tsp/Node.h"
+#include "ga/Path.h"
 
 std::vector<Node> tsp_to_vector(std::string& file_path);
 

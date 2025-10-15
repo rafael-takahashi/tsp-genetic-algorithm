@@ -9,11 +9,11 @@
 #include <vector>
 #include <random>
 #include <future>
-#include "ga/path.h"
+#include "ga/Path.h"
 
 class ThreadPool {
 public:
-    ThreadPool();
+    ThreadPool(int work_size, int num_threads);
     ~ThreadPool();
 
     std::future<std::vector<Path>> enqueue(

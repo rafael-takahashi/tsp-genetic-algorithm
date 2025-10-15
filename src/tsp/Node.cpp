@@ -1,4 +1,4 @@
-#include "tsp/node.h"
+#include "tsp/Node.h"
 
 #include <math.h>
 

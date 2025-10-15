@@ -67,11 +67,11 @@ cmake --build . --config Release
 ### Build Types
 ```bash
 # Debug build (with debugging symbols, no optimization)
-cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DCMAKE_BUILD_TYPE=Debug .
 make
 
 # Release build (with optimizations)
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release .
 make
 ```
 
