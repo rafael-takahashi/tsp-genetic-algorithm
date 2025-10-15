@@ -1,0 +1,8 @@
+{
+    "population_size": 50,
+    "tournament_size": 5,
+    "mutation_rate": 0.1,
+    "local_opt_rate": 0.3,
+    "elite_size": 2,
+    "max_generations": 50
+}

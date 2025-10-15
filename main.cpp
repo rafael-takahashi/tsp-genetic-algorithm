@@ -1,11 +1,14 @@
 #include <iostream>
 #include <string>
-#include <cstring>
+#include <thread>
 
 #include "ga/GeneticAlgorithm.h"
 #include "ga/Parameters.h"
 
 using namespace std;
+
+string const DEFAULT_FILE_PATH = "instances/u574.tsp";
+string const CONFIG_PATH = "config.json";
 
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " [OPTIONS] [instance_path]" << endl;
@@ -27,9 +30,9 @@ void print_usage(const char* program_name) {
 
 int main(int argc, char* argv[]) {
     bool sequential = false;
-    string file_path = "instances/u574.tsp";
+    string file_path = DEFAULT_FILE_PATH;
     int num_threads = max(2u, thread::hardware_concurrency());
-    GAParameters params;
+    GAParameters params = GAParameters::from_file(CONFIG_PATH);
     
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
@@ -56,7 +59,10 @@ int main(int argc, char* argv[]) {
     cout << "  Mode: " << mode << endl;
     cout << "  Instance: " << file_path << endl;
     if (!sequential) cout << "  Number of Threads: " << num_threads << endl;
+    params.print();
     cout << endl;
     
-    return sequential ? genetic_algorithm(file_path, params) : parallel_genetic_algorithm(file_path, params, num_threads);
+    return sequential 
+        ? genetic_algorithm(file_path, params) 
+        : parallel_genetic_algorithm(file_path, params, num_threads);
 }
