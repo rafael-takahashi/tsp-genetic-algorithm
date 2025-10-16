@@ -20,12 +20,14 @@ tsp-genetic-algorithm/
 │   ├── tsp/              # TSP-specific components
 │   ├── path/             # Path/tour representation
 │   ├── ga/               # Genetic algorithm logic
-│   └── parallel/         # Parallelization (ThreadPool)
+│   ├── parallel/         # Parallelization (ThreadPool)
+│   └── utils/            # Utils (e.g. Write results to CSV)
 ├── src/                  # Implementation files
 │   ├── tsp/
 │   ├── path/
 │   ├── ga/
-│   └── parallel/
+│   ├── parallel/
+│   └── utils/
 ├── instances/            # TSPLIB problem instances (.tsp files)
 ├── results/              # Output directory for results
 └── scripts/              # Python plotting and analysis scripts
@@ -36,33 +38,6 @@ tsp-genetic-algorithm/
 - **C++17** compatible compiler (GCC 7+, Clang 5+, or MSVC 2017+)
 - **CMake 3.15** or higher
 - *(Optional)* Python 3.x for visualization scripts
-
-## Building the Project
-
-### Linux/macOS
-```bash
-# Clone the repository
-git clone <repository-url>
-cd tsp-genetic-algorithm
-
-# Create build directory
-mkdir build
-cd build
-
-# Configure and build
-cmake ..
-make -j
-
-# Executable will be at: ./tsp_ga
-```
-
-### Windows (Visual Studio)
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-```
 
 ### Build Types
 ```bash
@@ -96,7 +71,7 @@ This project uses TSPLIB format instances. Download instances from [TSPLIB](http
 
 ## Algorithm Parameters
 
-Configure genetic algorithm parameters in the source code:
+Configure genetic algorithm parameters in `config.json`:
 - Population size
 - Tournament size
 - Mutation rate
@@ -112,52 +87,6 @@ cd scripts
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Plot convergence
-python plot_convergence.py ../results/stats.csv
-
-# Visualize best tour
-python plot_tour.py ../results/best_tour.txt
-```
-
-## Results
-
-Results are saved in the `results/` directory:
-- Best tour found
-- Fitness statistics per generation
-- Execution time comparisons (sequential vs parallel)
-
-## Development
-
-### Cleaning Build Files
-```bash
-# From build directory
-make clean
-
-# Complete rebuild
-cd ..
-rm -rf build/
-mkdir build && cd build
-cmake .. && make -j
-```
-
-### Running Tests
-```bash
-# If you add tests
-cd build
-ctest
-```
-
-## Performance Comparison
-
-Compare sequential vs parallel performance:
-```bash
-# Sequential
-time ./tsp_ga -s instances/u574.tsp
-
-# Parallel
-time ./tsp_ga instances/u574.tsp
-```
 
 ## References
 

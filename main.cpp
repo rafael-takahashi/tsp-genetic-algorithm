@@ -87,8 +87,7 @@ int main(int argc, char* argv[]) {
         isSequential,
         num_threads,
         elapsed.count(),
-        found_path.distance,
-        found_path.fitness
+        found_path.distance
     );
 
     return 0;

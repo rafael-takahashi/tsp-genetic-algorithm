@@ -9,6 +9,5 @@ void write_result_to_csv(
     bool sequential,
     int num_threads,
     double elapsed_ms,
-    double best_distance,
-    double best_fitness
+    double best_distance
 );

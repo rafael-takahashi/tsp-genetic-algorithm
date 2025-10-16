@@ -14,8 +14,7 @@ void write_result_to_csv(
     bool sequential,
     int num_threads,
     double elapsed_ms,
-    double best_distance,
-    double best_fitness
+    double best_distance
 ) {
     std::string file_name = "results/" + instance_name + ".csv";
     std::ofstream file(file_name, std::ios::app);
@@ -27,7 +26,7 @@ void write_result_to_csv(
 
     file.seekp(0, std::ios::end);
     if (file.tellp() == 0) {
-        file << "id,mode,threads,time_ms,best_distance,best_fitness\n";
+        file << "id,mode,threads,time_ms,best_distance\n";
     }
 
     std::string id = sequential ? "seq" : "par_" + std::to_string(num_threads);
@@ -37,8 +36,7 @@ void write_result_to_csv(
          << mode << ","
          << num_threads << ","
          << std::fixed << std::setprecision(4) << elapsed_ms << ","
-         << best_distance << ","
-         << best_fitness << "\n";
+         << best_distance << "\n";
 
     file.close();
 }
