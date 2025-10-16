@@ -11,7 +11,7 @@ std::string get_instance_name(std::string& file_path) {
 
 void write_result_to_csv(
     const std::string& instance_name,
-    bool sequential,
+    bool isSequential,
     int num_threads,
     double elapsed_ms,
     double best_distance
@@ -28,9 +28,9 @@ void write_result_to_csv(
     if (file.tellp() == 0) {
         file << "id,mode,threads,time_ms,best_distance\n";
     }
-
-    std::string id = sequential ? "seq" : "par_" + std::to_string(num_threads);
-    std::string mode = sequential ? "sequential" : "parallel";
+    
+    std::string id = isSequential ? "seq" : "par_" + std::to_string(num_threads);
+    std::string mode = isSequential ? "sequential" : "parallel";
 
     file << id << ","
          << mode << ","

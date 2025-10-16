@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
     write_result_to_csv(
         get_instance_name(file_path),
         isSequential,
-        num_threads,
+        isSequential ? 1 : num_threads,
         elapsed.count(),
         found_path.distance
     );
