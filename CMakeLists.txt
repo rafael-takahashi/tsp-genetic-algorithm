@@ -28,10 +28,15 @@ file(GLOB_RECURSE PARALLEL_SOURCES
     "${PROJECT_SOURCE_DIR}/src/parallel/*.cpp"
 )
 
+file(GLOB_RECURSE UTILS_SOURCES
+    "${PROJECT_SOURCE_DIR}/src/utils/*.cpp"
+)
+
 add_executable(tsp_ga 
     ${TSP_SOURCES}
     ${GA_SOURCES}
     ${PARALLEL_SOURCES}
+    ${UTILS_SOURCES}
     main.cpp
 )
 

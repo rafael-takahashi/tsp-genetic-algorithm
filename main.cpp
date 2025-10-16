@@ -6,6 +6,7 @@
 #include "ga/GeneticAlgorithm.h"
 #include "ga/Parameters.h"
 #include "tsp/Tsp.h"
+#include "utils/Results.h"
 
 using namespace std;
 
@@ -32,9 +33,9 @@ void print_usage(const char* program_name) {
 }
 
 int main(int argc, char* argv[]) {
-    bool sequential = false;
+    bool isSequential = false;
     string file_path = DEFAULT_FILE_PATH;
-    int num_threads = max(2u, thread::hardware_concurrency());
+    int num_threads = max(1u, thread::hardware_concurrency());
     GAParameters params = GAParameters::from_file(CONFIG_PATH);
     
     for (int i = 1; i < argc; i++) {
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
             print_usage(argv[0]);
             return 0;
         } else if (arg == "-s" || arg == "--sequential") {
-            sequential = true;
+            isSequential = true;
         } else if (arg == "-t" || arg == "--threads") {
             if (i + 1 < argc) {
                 num_threads = stoi(argv[++i]);
@@ -57,11 +58,11 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    string mode = sequential ? "sequential" : "parallel";
+    string mode = isSequential ? "sequential" : "parallel";
     cout << "Configuration:" << endl;
     cout << "  Mode: " << mode << endl;
     cout << "  Instance: " << file_path << endl;
-    if (!sequential) cout << "  Number of Threads: " << num_threads << endl;
+    if (!isSequential) cout << "  Number of Threads: " << num_threads << endl;
     params.print();
     cout << endl;
     
@@ -70,17 +71,25 @@ int main(int argc, char* argv[]) {
     mt19937 gen(SEED);
     uniform_real_distribution<> prob_dist(0.0, 1.0);
 
-
     auto start = chrono::high_resolution_clock::now();
 
-    Path res = sequential
+    Path found_path = isSequential
         ? genetic_algorithm(node_list, params, gen, prob_dist)
-        : parallel_genetic_algorithm(node_list, params, gen, prob_dist, num_threads);
+        : parallel_genetic_algorithm(node_list, params, gen, num_threads);
 
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> elapsed = end - start;
     
-    cout << "Execution time: " << elapsed.count() << " ms\n";
+    // cout << "Execution time: " << elapsed.count() << " ms\n";
+
+    write_result_to_csv(
+        get_instance_name(file_path),
+        isSequential,
+        num_threads,
+        elapsed.count(),
+        found_path.distance,
+        found_path.fitness
+    );
 
     return 0;
 }

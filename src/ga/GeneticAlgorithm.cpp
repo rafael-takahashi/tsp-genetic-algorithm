@@ -17,9 +17,9 @@ Path genetic_algorithm(
 ) {
     vector<Path> population = generate_population(node_list, gen);
 
-    cout << "Initial population generated:\n";
-    double average = get_average_distance(population);
-    cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
+    // cout << "Initial population generated:\n";
+    // double average = get_average_distance(population);
+    // cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
     int generation = 0;
 
@@ -50,9 +50,9 @@ Path genetic_algorithm(
 
         population = move(new_population);
         
-        cout << generation + 1 << "º Generation average: ";
-        average = get_average_distance(population);
-        cout << fixed << setprecision(15) << average << "\n";
+        // cout << generation + 1 << "º Generation average: ";
+        // average = get_average_distance(population);
+        // cout << fixed << setprecision(15) << average << "\n";
 
         generation++;
     }
@@ -64,14 +64,13 @@ Path parallel_genetic_algorithm(
     vector<Node>& node_list,
     GAParameters& params,
     mt19937& gen,
-    uniform_real_distribution<>& prob_dist,
     int num_threads
 ) {
     vector<Path> population = generate_population(node_list, gen);
 
-    cout << "Initial population generated:\n";
-    double average = get_average_distance(population);
-    cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
+    // cout << "Initial population generated:\n";
+    // double average = get_average_distance(population);
+    // cout << fixed << setprecision(15) << "Average distance: " << average << "\n";
 
     int generation = 0;
 
@@ -127,9 +126,9 @@ Path parallel_genetic_algorithm(
 
         population = move(new_population);
         
-        cout << generation + 1 << "º Generation average: ";
-        average = get_average_distance(population);
-        cout << fixed << setprecision(15) << average << "\n";
+        // cout << generation + 1 << "º Generation average: ";
+        // average = get_average_distance(population);
+        // cout << fixed << setprecision(15) << average << "\n";
 
         generation++;
     }

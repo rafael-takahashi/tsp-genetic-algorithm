@@ -19,6 +19,5 @@ Path parallel_genetic_algorithm(
     std::vector<Node>& node_list,
     GAParameters& params,
     std::mt19937& gen,
-    std::uniform_real_distribution<>& prob_dist,
     int num_threads
 );
