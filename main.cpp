@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -69,9 +70,17 @@ int main(int argc, char* argv[]) {
     mt19937 gen(SEED);
     uniform_real_distribution<> prob_dist(0.0, 1.0);
 
-    Path res = sequential 
+
+    auto start = chrono::high_resolution_clock::now();
+
+    Path res = sequential
         ? genetic_algorithm(node_list, params, gen, prob_dist)
         : parallel_genetic_algorithm(node_list, params, gen, prob_dist, num_threads);
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> elapsed = end - start;
+    
+    cout << "Execution time: " << elapsed.count() << " ms\n";
 
     return 0;
 }
