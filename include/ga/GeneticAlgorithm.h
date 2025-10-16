@@ -8,5 +8,17 @@
 #include "Parameters.h"
 #include "Path.h"
 
-int genetic_algorithm(std::string file_path, GAParameters params);
-int parallel_genetic_algorithm(std::string file_path, GAParameters params, int num_threads);
+Path genetic_algorithm(
+    std::vector<Node>& node_list,
+    GAParameters& params,
+    std::mt19937& gen,
+    std::uniform_real_distribution<>& prob_dist
+);
+
+Path parallel_genetic_algorithm(
+    std::vector<Node>& node_list,
+    GAParameters& params,
+    std::mt19937& gen,
+    std::uniform_real_distribution<>& prob_dist,
+    int num_threads
+);

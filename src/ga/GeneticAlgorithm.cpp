@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <random>
 #include <queue>
 
 #include "ga/GeneticAlgorithm.h"
@@ -10,14 +9,12 @@
 
 using namespace std;
 
-const int SEED = 42;
-
-int genetic_algorithm(string file_path, GAParameters params) {
-    vector<Node> node_list = tsp_to_vector(file_path);
-
-    mt19937 gen(SEED);
-    uniform_real_distribution<> prob_dist(0.0, 1.0);
-
+Path genetic_algorithm(
+    vector<Node>& node_list,
+    GAParameters& params,
+    mt19937& gen,
+    uniform_real_distribution<>& prob_dist
+) {
     vector<Path> population = generate_population(node_list, gen);
 
     cout << "Initial population generated:\n";
@@ -60,17 +57,16 @@ int genetic_algorithm(string file_path, GAParameters params) {
         generation++;
     }
 
-    Path best_path = get_best_path(population);
-
-    return 0;
+    return get_best_path(population);
 }
 
-int parallel_genetic_algorithm(string file_path, GAParameters params, int num_threads) {
-    vector<Node> node_list = tsp_to_vector(file_path);
-
-    mt19937 gen(SEED);
-    uniform_real_distribution<> prob_dist(0.0, 1.0);
-
+Path parallel_genetic_algorithm(
+    vector<Node>& node_list,
+    GAParameters& params,
+    mt19937& gen,
+    uniform_real_distribution<>& prob_dist,
+    int num_threads
+) {
     vector<Path> population = generate_population(node_list, gen);
 
     cout << "Initial population generated:\n";
@@ -138,7 +134,5 @@ int parallel_genetic_algorithm(string file_path, GAParameters params, int num_th
         generation++;
     }
 
-    Path best_path = get_best_path(population);
-
-    return 0;
+    return get_best_path(population);
 }

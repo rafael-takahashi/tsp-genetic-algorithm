@@ -4,11 +4,13 @@
 
 #include "ga/GeneticAlgorithm.h"
 #include "ga/Parameters.h"
+#include "tsp/Tsp.h"
 
 using namespace std;
 
-string const DEFAULT_FILE_PATH = "instances/u574.tsp";
-string const CONFIG_PATH = "config.json";
+const string DEFAULT_FILE_PATH = "instances/u574.tsp";
+const string CONFIG_PATH = "config.json";
+const int SEED = 42;
 
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " [OPTIONS] [instance_path]" << endl;
@@ -62,7 +64,14 @@ int main(int argc, char* argv[]) {
     params.print();
     cout << endl;
     
-    return sequential 
-        ? genetic_algorithm(file_path, params) 
-        : parallel_genetic_algorithm(file_path, params, num_threads);
+    vector<Node> node_list = tsp_to_vector(file_path);
+
+    mt19937 gen(SEED);
+    uniform_real_distribution<> prob_dist(0.0, 1.0);
+
+    Path res = sequential 
+        ? genetic_algorithm(node_list, params, gen, prob_dist)
+        : parallel_genetic_algorithm(node_list, params, gen, prob_dist, num_threads);
+
+    return 0;
 }
