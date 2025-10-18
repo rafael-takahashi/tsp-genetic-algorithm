@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <random>
 #include <string>
 #include <thread>
 
@@ -12,7 +13,6 @@ using namespace std;
 
 const string DEFAULT_FILE_PATH = "instances/u574.tsp";
 const string CONFIG_PATH = "config.json";
-const int SEED = 42;
 
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " [OPTIONS] [instance_path]" << endl;
@@ -68,7 +68,8 @@ int main(int argc, char* argv[]) {
     
     vector<Node> node_list = tsp_to_vector(file_path);
 
-    mt19937 gen(SEED);
+    random_device rd;
+    mt19937 gen(rd());
     uniform_real_distribution<> prob_dist(0.0, 1.0);
 
     auto start = chrono::high_resolution_clock::now();
@@ -84,6 +85,7 @@ int main(int argc, char* argv[]) {
 
     write_result_to_csv(
         get_instance_name(file_path),
+        found_path.size,
         isSequential,
         isSequential ? 1 : num_threads,
         elapsed.count(),

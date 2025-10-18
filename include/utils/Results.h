@@ -6,6 +6,7 @@ std::string get_instance_name(std::string& file_path);
 
 void write_result_to_csv(
     const std::string& instance_name,
+    int size,
     bool isSequential,
     int num_threads,
     double elapsed_ms,

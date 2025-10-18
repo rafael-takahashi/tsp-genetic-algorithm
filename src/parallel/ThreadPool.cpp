@@ -3,9 +3,7 @@
 
 using namespace std;
 
-const int POOL_SEED = 43;
-
-ThreadPool::ThreadPool(int work_size, int num_threads) {
+ThreadPool::ThreadPool(int work_size, int num_threads, int base_seed) {
     int segment_size = work_size / num_threads;
     int remainder = work_size % num_threads;
 
@@ -23,7 +21,7 @@ ThreadPool::ThreadPool(int work_size, int num_threads) {
     generators_.resize(num_threads);
     
     for (int i = 0; i < num_threads; i++) {
-        generators_[i].seed(POOL_SEED + i);
+        generators_[i].seed(base_seed + i);
         threads_.emplace_back([this, i] {
             while (true) {
                 function<void(int)> task;

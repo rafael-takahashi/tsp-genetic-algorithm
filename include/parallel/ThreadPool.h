@@ -13,7 +13,7 @@
 
 class ThreadPool {
 public:
-    ThreadPool(int work_size, int num_threads);
+    ThreadPool(int work_size, int num_threads, int base_seed);
     ~ThreadPool();
 
     std::future<std::vector<Path>> enqueue(

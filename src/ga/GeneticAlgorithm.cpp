@@ -74,7 +74,7 @@ Path parallel_genetic_algorithm(
 
     int generation = 0;
 
-    ThreadPool pool(params.population_size - params.elite_size, num_threads);
+    ThreadPool pool(params.population_size - params.elite_size, num_threads, gen());
     
     while (generation != params.max_generations) {
         vector<Path> new_population;
