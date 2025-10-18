@@ -29,15 +29,16 @@ tsp-genetic-algorithm/
 │   ├── parallel/
 │   └── utils/
 ├── instances/            # TSPLIB problem instances (.tsp files)
+├── notebooks/            # Analysis and plotting notebooks
 ├── results/              # Output directory for results
-└── scripts/              # Python plotting and analysis scripts
+└── scripts/              # Automation scripts
 ```
 
 ## Requirements
 
 - **C++17** compatible compiler (GCC 7+, Clang 5+, or MSVC 2017+)
 - **CMake 3.15** or higher
-- *(Optional)* Python 3.x for visualization scripts
+- *(Optional)* Python 3.x for visualization
 
 ### Build Types
 ```bash
@@ -78,15 +79,6 @@ Configure genetic algorithm parameters in `config.json`:
 - Local Optimization (2-opt) rate
 - Elite size
 - Number of generations
-
-## Visualization
-
-Python scripts for analyzing and plotting results are in the `scripts/` directory:
-```bash
-cd scripts
-
-# Install dependencies
-pip install -r requirements.txt
 
 ## References
 

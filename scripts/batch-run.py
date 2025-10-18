@@ -7,9 +7,9 @@ NUM_RUNS = 3
 
 instances = [
     f"{INSTANCES_DIR}u574.tsp",
-    # f"{INSTANCES_DIR}pr1002.tsp",
-    # f"{INSTANCES_DIR}fnl4461.tsp",
-    # f"{INSTANCES_DIR}brd14051.tsp"
+    f"{INSTANCES_DIR}pr1002.tsp",
+    f"{INSTANCES_DIR}fnl4461.tsp",
+    f"{INSTANCES_DIR}brd14051.tsp"
 ]
 
 run_flags = [ ["-s"] ] + [ ["-t", str(n)] for n in [1, 2, 4, 8, 16] ]
