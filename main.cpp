@@ -33,7 +33,8 @@ void print_usage(const char* program_name) {
 }
 
 int main(int argc, char* argv[]) {
-    bool isSequential = false;
+    bool is_sequential = false;
+    bool is_profile_enabled = false;
     string file_path = DEFAULT_FILE_PATH;
     int num_threads = max(1u, thread::hardware_concurrency());
     GAParameters params = GAParameters::from_file(CONFIG_PATH);
@@ -45,7 +46,8 @@ int main(int argc, char* argv[]) {
             print_usage(argv[0]);
             return 0;
         } else if (arg == "-s" || arg == "--sequential") {
-            isSequential = true;
+            is_sequential = true;
+            num_threads = 1;
         } else if (arg == "-t" || arg == "--threads") {
             if (i + 1 < argc) {
                 num_threads = stoi(argv[++i]);
@@ -53,16 +55,21 @@ int main(int argc, char* argv[]) {
                 cerr << "Error: Missing value for " << arg << " option." << endl;
                 return 1;
             }
+        } else if (arg == "-p" || arg == "--profile") {
+            is_profile_enabled = true;
         } else {
             file_path = arg;
         }
     }
+
+    string instance_name = get_instance_name(file_path);
     
-    string mode = isSequential ? "sequential" : "parallel";
+    string mode = is_sequential ? "sequential" : "parallel";
     cout << "Configuration:" << endl;
+    cout << "  Profile Enabled: " << boolalpha << is_profile_enabled << endl;
     cout << "  Mode: " << mode << endl;
-    cout << "  Instance: " << file_path << endl;
-    if (!isSequential) cout << "  Number of Threads: " << num_threads << endl;
+    cout << "  Instance: " << instance_name << endl;
+    if (!is_sequential) cout << "  Number of Threads: " << num_threads << endl;
     params.print();
     cout << endl;
     
@@ -72,25 +79,39 @@ int main(int argc, char* argv[]) {
     mt19937 gen(rd());
     uniform_real_distribution<> prob_dist(0.0, 1.0);
 
-    auto start = chrono::high_resolution_clock::now();
+    if (is_profile_enabled) {
+        std::thread monitor(
+            profile_to_csv,
+            instance_name,
+            is_sequential,
+            num_threads
+        );
 
-    Path found_path = isSequential
-        ? genetic_algorithm(node_list, params, gen, prob_dist)
-        : parallel_genetic_algorithm(node_list, params, gen, num_threads);
+        Path found_path = is_sequential
+            ? genetic_algorithm(node_list, params, gen, prob_dist)
+            : parallel_genetic_algorithm(node_list, params, gen, num_threads);
 
-    auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double, milli> elapsed = end - start;
-    
-    // cout << "Execution time: " << elapsed.count() << " ms\n";
+        monitor_running.store(false);
+        monitor.join();
+    } else {
+        auto start = std::chrono::high_resolution_clock::now();
 
-    write_result_to_csv(
-        get_instance_name(file_path),
-        found_path.size,
-        isSequential,
-        isSequential ? 1 : num_threads,
-        elapsed.count(),
-        found_path.distance
-    );
+        Path found_path = is_sequential
+            ? genetic_algorithm(node_list, params, gen, prob_dist)
+            : parallel_genetic_algorithm(node_list, params, gen, num_threads);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+
+        result_to_csv(
+            instance_name,
+            found_path.size,
+            is_sequential,
+            is_sequential ? 1 : num_threads,
+            elapsed.count(),
+            found_path.distance
+        );
+    }
 
     return 0;
 }
