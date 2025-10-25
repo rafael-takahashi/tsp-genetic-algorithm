@@ -41,10 +41,7 @@ _deps/
 Makefile
 
 # Results and output files
-results/*.csv
-results/*.txt
-results/*.json
-*.png
+results/*
 !results/.gitkeep
 
 # IDE specific files
