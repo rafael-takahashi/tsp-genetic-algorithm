@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-EXECUTABLE = "./tsp_ga"
+EXECUTABLE = "./build/tsp_ga"
 INSTANCES_DIR = "instances/"
 NUM_RUNS = 3
 

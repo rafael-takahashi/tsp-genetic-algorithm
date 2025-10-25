@@ -4,7 +4,7 @@
 #include <string>
 
 const std::string RESULT_FILE_PATH = "results/data.csv";
-const std::string PROFILE_FILE_PATH = "results/profile.csv";
+const std::string PROFILE_FILE_PATH = "results/profiles/";
 const double SAMPLE_INTERVAL = 0.2;
 
 std::string get_instance_name(std::string& file_path);

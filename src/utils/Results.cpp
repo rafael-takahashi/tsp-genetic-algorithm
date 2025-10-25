@@ -69,7 +69,7 @@ void profile_to_csv(
     bool is_sequential,
     int num_threads
 ) {
-    std::string profile_file = "results/" 
+    std::string profile_file = PROFILE_FILE_PATH
         + instance_name 
         + "_profile_" 
         + (is_sequential ? "sequential" : "parallel") 
