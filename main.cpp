@@ -19,22 +19,25 @@ void print_usage(const char* program_name) {
     cout << endl;
     cout << "Options:" << endl;
     cout << "  -s, --sequential       Run in sequential mode (default: parallel)" << endl;
-    cout << "  -t, --threads          Set number of threads" << endl;
+    cout << "  -t, --threads <n>      Set number of threads" << endl;
+    cout << "  -P, --population <n>   Overwrites configured population size with n" << endl;
+    cout << "  -p, --profile          Enable profiling output" << endl;
     cout << "  -h, --help             Show this help message" << endl;
     cout << endl;
     cout << "Arguments:" << endl;
-    cout << "  instance_path         Path to TSP instance (default: instances/u574.tsp)" << endl;
+    cout << "  instance_path          Path to TSP instance (default: instances/u574.tsp)" << endl;
     cout << endl;
     cout << "Examples:" << endl;
     cout << "  " << program_name << endl;
     cout << "  " << program_name << " instances/berlin52.tsp" << endl;
     cout << "  " << program_name << " -s instances/berlin52.tsp" << endl;
-    cout << "  " << program_name << " --sequential instances/eil51.tsp" << endl;
+    cout << "  " << program_name << " -t 4 -P 200 instances/a280.tsp" << endl;
+    cout << "  " << program_name << " --profile instances/eil51.tsp" << endl;
 }
 
 int main(int argc, char* argv[]) {
     bool is_sequential = false;
-    bool is_profile_enabled = false;
+    bool is_profiling_enabled = false;
     string file_path = DEFAULT_FILE_PATH;
     int num_threads = max(1u, thread::hardware_concurrency());
     GAParameters params = GAParameters::from_file(CONFIG_PATH);
@@ -55,8 +58,15 @@ int main(int argc, char* argv[]) {
                 cerr << "Error: Missing value for " << arg << " option." << endl;
                 return 1;
             }
+        } else if (arg == "-P" || arg == "--population") {
+            if (i + 1 < argc) {
+                params.population_size = std::stoi(argv[++i]);
+            } else {
+                std::cerr << "Error: Missing value for " << arg << " option." << std::endl;
+                return 1;
+            }
         } else if (arg == "-p" || arg == "--profile") {
-            is_profile_enabled = true;
+            is_profiling_enabled = true;
         } else {
             file_path = arg;
         }
@@ -66,7 +76,7 @@ int main(int argc, char* argv[]) {
     
     string mode = is_sequential ? "sequential" : "parallel";
     cout << "Configuration:" << endl;
-    cout << "  Profile Enabled: " << boolalpha << is_profile_enabled << endl;
+    cout << "  Profiling Enabled: " << boolalpha << is_profiling_enabled << endl;
     cout << "  Mode: " << mode << endl;
     cout << "  Instance: " << instance_name << endl;
     if (!is_sequential) cout << "  Number of Threads: " << num_threads << endl;
@@ -79,7 +89,7 @@ int main(int argc, char* argv[]) {
     mt19937 gen(rd());
     uniform_real_distribution<> prob_dist(0.0, 1.0);
 
-    if (is_profile_enabled) {
+    if (is_profiling_enabled) {
         std::thread monitor(
             profile_to_csv,
             instance_name,
@@ -106,6 +116,7 @@ int main(int argc, char* argv[]) {
         result_to_csv(
             instance_name,
             found_path.size,
+            params.population_size,
             is_sequential,
             is_sequential ? 1 : num_threads,
             elapsed.count(),

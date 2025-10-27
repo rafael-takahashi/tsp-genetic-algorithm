@@ -14,7 +14,8 @@ std::string get_instance_name(std::string& file_path) {
 
 void result_to_csv(
     const std::string& instance_name,
-    int size,
+    int instance_size,
+    int population_size,
     bool is_sequential,
     int num_threads,
     double elapsed_ms,
@@ -29,12 +30,13 @@ void result_to_csv(
 
     file.seekp(0, std::ios::end);
     if (file.tellp() == 0)
-        file << "instance,size,mode,threads,time_ms,best_distance\n";
+        file << "instance,size,population_size,mode,threads,time_ms,best_distance\n";
 
     std::string mode = is_sequential ? "sequential" : "parallel";
 
     file << instance_name << ","
-         << size << ","
+         << instance_size << ","
+         << population_size << ","
          << mode << ","
          << num_threads << ","
          << std::fixed << std::setprecision(4) << elapsed_ms << ","

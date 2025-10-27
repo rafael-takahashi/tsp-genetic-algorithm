@@ -11,7 +11,8 @@ std::string get_instance_name(std::string& file_path);
 
 void result_to_csv(
     const std::string& instance_name,
-    int size,
+    int instance_size,
+    int population_size,
     bool is_sequential,
     int num_threads,
     double elapsed_ms,

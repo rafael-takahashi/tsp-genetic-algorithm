@@ -80,6 +80,7 @@ make
 |------|------------|--------------|----------|
 | `-s` | `--sequential` | Runs the algorithm in **sequential mode** (single thread). | `./tsp_ga -s instances/eil51.tsp` |
 | `-t` | `--threads` | Sets the **number of threads** to use in parallel mode. | `./tsp_ga instances/pr1002.tsp -t 8` |
+| `-P` | `--population` | Sets the **population size**, overwriting the configured value. | `./tsp_ga instances/a280.tsp -t 4 -P 200` |
 | `-p` | `--profile` | Enables **profiling mode**, recording CPU and memory usage. | `./tsp_ga instances/pr1002.tsp -t 8 -p` |
 | *(none)* | – | Runs in **parallel mode** with default parameters. | `./tsp_ga` |
 
