@@ -14,11 +14,11 @@ instances = [
     #f"{INSTANCES_DIR}fnl4461.tsp",
     #f"{INSTANCES_DIR}rl5934.tsp",
 ]
-population_sizes = [50, 100, 200, 400, 800]
+#population_sizes = [50, 100, 200, 400, 800, 1000]
+population_sizes = [100, 200, 400, 800, 1000]
 
-# remove [["-s"]]
 run_flags = [["-s"]] + [["-t", str(n)] for n in [1, 2, 4, 8, 16]]
-
+# run_flags = [["-t", str(n)] for n in [1, 2, 4, 8, 16]]
 
 os.makedirs("results", exist_ok=True)
 
