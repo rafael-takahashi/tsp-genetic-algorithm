@@ -5,20 +5,20 @@ EXECUTABLE = "./build/tsp_ga"
 INSTANCES_DIR = "instances/"
 NUM_RUNS = 3
 FIX_POPULATION = False
-FIXED_INSTANCE = f"{INSTANCES_DIR}a280.tsp"
+FIXED_INSTANCE = f"{INSTANCES_DIR}pr1002.tsp"
 
 instances = [
-    f"{INSTANCES_DIR}a280.tsp",
+    #f"{INSTANCES_DIR}a280.tsp",
     #f"{INSTANCES_DIR}u574.tsp",
-    #f"{INSTANCES_DIR}pr1002.tsp",
+    f"{INSTANCES_DIR}pr1002.tsp",
     #f"{INSTANCES_DIR}fnl4461.tsp",
     #f"{INSTANCES_DIR}rl5934.tsp",
 ]
-#population_sizes = [50, 100, 200, 400, 800, 1000]
-population_sizes = [100, 200, 400, 800, 1000]
+# population_sizes = [50, 100, 200, 400, 800, 1000]
+population_sizes = [1000]
 
-run_flags = [["-s"]] + [["-t", str(n)] for n in [1, 2, 4, 8, 16]]
-# run_flags = [["-t", str(n)] for n in [1, 2, 4, 8, 16]]
+# run_flags = [["-s"]] + [["-t", str(n)] for n in [1, 2, 4, 8, 16]]
+# run_flags = [["-t", str(n)] for n in [16]]
 
 os.makedirs("results", exist_ok=True)
 
